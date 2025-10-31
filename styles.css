@@ -41,6 +41,7 @@
   --choices-gap: 4px;
   --gap: 4px;
 
+  --safe-top: max(18px, env(safe-area-inset-top));
   --safe-bottom: max(16px, env(safe-area-inset-bottom));
 
   /* геймплей-капсула */
@@ -118,7 +119,7 @@ body.loaded::before {
 /* ==== ВОДЯНОЙ ЗНАК ==== */
 .watermark {
   position: absolute;
-  top: 18px;
+  top: var(--safe-top);
   left: 50%;
   transform: translateX(-50%);
   color: #fff;
@@ -344,7 +345,7 @@ body.loaded::before {
   display: inline-flex;
 }
 
-/* Бейдж разработчика: как у менеджера, справа */
+/* Бейдж разработчика */
 #badge-dev {
   height: var(--badge-h);
   display: none;

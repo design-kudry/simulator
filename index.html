@@ -92,6 +92,8 @@
     border: 2px solid #000;
     padding: var(--q-pad-y) var(--q-pad-x);
     text-align: center;
+    /* отображаем символы \n как перенос строки */
+    white-space: pre-line;
     box-sizing: border-box;
     pointer-events: auto;
     opacity: 1;
@@ -129,7 +131,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    bottom: calc(var(--safe-bottom) + 16px);
+    bottom: calc(var(--safe-bottom) + var(--ui-bottom-offset));
     width: var(--container-W);
     z-index: 7;
     opacity: 1;
