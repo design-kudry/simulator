@@ -88,12 +88,18 @@ function changeScene(src) {
 }
 
 /* ---------- персонаж: без анимации (мгновенная замена), но без мигания ---------- */
+let __characterLoadId = 0; // counter to cancel stale loads
 function setCharacter(src) {
+  const loadId = ++__characterLoadId;
   resolveImageSrc(src).then((best) => {
+    if (loadId !== __characterLoadId) return; // stale request, ignore
     if (character.src && character.src.endsWith(best)) return;
     const img = new Image();
     img.src = best;
-    img.decode ? img.decode().then(() => { character.src = best; }) : (img.onload = () => { character.src = best; });
+    const apply = () => { 
+      if (loadId === __characterLoadId) character.src = best; 
+    };
+    img.decode ? img.decode().then(apply) : (img.onload = apply);
   });
 }
 
@@ -114,12 +120,18 @@ function hideCharacter() {
 }
 
 /* ---------- менеджер: справа ---------- */
+let __managerLoadId = 0;
 function setManager(src) {
+  const loadId = ++__managerLoadId;
   resolveImageSrc(src).then((best) => {
+    if (loadId !== __managerLoadId) return;
     if (manager.src && manager.src.endsWith(best)) return;
     const img = new Image();
     img.src = best;
-    img.decode ? img.decode().then(() => { manager.src = best; }) : (img.onload = () => { manager.src = best; });
+    const apply = () => { 
+      if (loadId === __managerLoadId) manager.src = best; 
+    };
+    img.decode ? img.decode().then(apply) : (img.onload = apply);
   });
 }
 
@@ -784,6 +796,7 @@ function showIntroScreen(text, nextFn) {
 
 
 /* ---------- стажёр: справа (как менеджер) ---------- */
+let __internLoadId = 0;
 function setIntern(src) {
   // Выровнять позицию: для intern-default добавляем небольшой сдвиг вправо,
   // для других спрайтов (например, intern-sad) — убираем, чтобы сохранить референсную позицию «Ага, поняла»
@@ -793,11 +806,16 @@ function setIntern(src) {
     intern.classList.remove('intern-offset');
   }
 
+  const loadId = ++__internLoadId;
   resolveImageSrc(src).then((best) => {
+    if (loadId !== __internLoadId) return;
     if (intern.src && intern.src.endsWith(best)) return;
     const img = new Image();
     img.src = best;
-    img.decode ? img.decode().then(() => intern.src = best) : (img.onload = () => intern.src = best);
+    const apply = () => { 
+      if (loadId === __internLoadId) intern.src = best; 
+    };
+    img.decode ? img.decode().then(apply) : (img.onload = apply);
   });
 }
 
@@ -820,12 +838,18 @@ function hideIntern() {
 }
 
 /* ---------- разработчик: справа ---------- */
+let __devLoadId = 0;
 function setDev(src) {
+  const loadId = ++__devLoadId;
   resolveImageSrc(src).then((best) => {
+    if (loadId !== __devLoadId) return;
     if (dev.src && dev.src.endsWith(best)) return;
     const img = new Image();
     img.src = best;
-    img.decode ? img.decode().then(() => { dev.src = best; }) : (img.onload = () => { dev.src = best; });
+    const apply = () => { 
+      if (loadId === __devLoadId) dev.src = best; 
+    };
+    img.decode ? img.decode().then(apply) : (img.onload = apply);
   });
 }
 
