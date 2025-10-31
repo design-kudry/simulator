@@ -1,0 +1,410 @@
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0) }
+  10% { transform: translate(-5%, -5%) }
+  20% { transform: translate(5%, 5%) }
+  30% { transform: translate(-5%, 5%) }
+  40% { transform: translate(5%, -5%) }
+  50% { transform: translate(-5%, 0%) }
+  60% { transform: translate(5%, 0%) }
+  70% { transform: translate(0%, 5%) }
+  80% { transform: translate(0%, -5%) }
+  90% { transform: translate(-2%, 2%) }
+}
+
+:root {
+  --stage-max-w: 430px;
+  --stage-max-h: 932px;
+  right: calc(50% - 310px);
+  --font: "Comic Sans MS", "Comic Sans", system-ui, -apple-system, sans-serif;
+  --fz-16: 16px;
+  --lh-16: 150%;
+  --ls-16: -0.176px;
+  --fz-12: 12px;
+
+  --container-W: 326px;
+  --q-pad-y: 16px;
+  --q-pad-x: 18px;
+  --q-radius: 24px;
+
+  --badge-h: 28px;
+  --badge-radius: 24px;
+  --badge-pad-x: 12px;
+  
+  --choice-h: 56px;
+  --choices-gap: 8px;
+  --gap: 4px;
+
+  --safe-bottom: max(16px, env(safe-area-inset-bottom));
+
+  /* геймплей-капсула */
+  --ui-box-h: 236px;
+  --ui-bottom-offset: 70px;
+  --choices-slot-h: calc(var(--choice-h) * 2 + var(--choices-gap));
+  --dialog-max-h: calc(var(--ui-box-h) - var(--badge-h) - var(--choices-slot-h) - (var(--gap) * 2));
+
+  /* анимации */
+  --fade-soft: 3s;
+  --fade-slow: 3s;
+  --ease: cubic-bezier(.25, .6, .3, 1);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #111;
+  font-family: var(--font);
+  font-size: var(--fz-16);
+  line-height: var(--lh-16);
+  letter-spacing: var(--ls-16);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-width: var(--stage-max-w);
+  max-height: var(--stage-max-h);
+  background: #000;
+  overflow: hidden;
+  touch-action: manipulation;
+  isolation: isolate;
+}
+
+#stage::after {
+  content: "";
+  position: absolute;
+  inset: -5%;
+  background-image: url('assets/texture.png');
+  background-size: cover;
+  opacity: .05;
+  pointer-events: none;
+  animation: grain 8s steps(10) infinite;
+  z-index: 10;
+}
+
+/* ==== ВОДЯНОЙ ЗНАК ==== */
+.watermark {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: var(--fz-12);
+  font-weight: 400;
+  pointer-events: none;
+  z-index: 11;
+  opacity: 0.8;
+}
+
+/* ==== СЦЕНА: два слоя + затемнение ТОЛЬКО фона ==== */
+#scene-stack {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.scene-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity var(--fade-slow) var(--ease);
+}
+
+.scene-layer.is-active {
+  opacity: 1;
+}
+
+#scene-dimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(120% 120% at 50% 60%, rgba(0, 0, 0, .18) 0%, rgba(0, 0, 0, .6) 100%);
+  opacity: 0;
+  transition: opacity var(--fade-soft) var(--ease);
+}
+
+#scene-dimmer.is-on {
+  opacity: 1;
+}
+
+/* ==== ПЕРСОНАЖ: БЕЗ анимации ==== */
+#character {
+  position: absolute;
+  bottom: -60px;
+  left: calc(50% - 80px);
+  transform: translateX(-50%);
+  width: 400px;
+  height: 600px;
+  object-fit: contain;
+  z-index: 3;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+#character.visible {
+  opacity: 1;
+}
+
+/* ==== МЕНЕДЖЕР: справа ==== */
+#manager {
+  position: absolute;
+  bottom: -60px;
+  right: calc(50% - 300px);
+  width: 423px;
+  height: 677px;
+  object-fit: contain;
+  z-index: 3;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+#manager.visible {
+  opacity: 1;
+}
+
+/* ==== СТАЖЁР: справа (как менеджер) ==== */
+#intern {
+  position: absolute;
+  bottom: -60px;
+  right: calc(50% - 290px);
+  width: 400px;
+  height: 600px;
+  object-fit: contain;
+  z-index: 3;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+#intern.visible {
+  opacity: 1;
+}
+
+/* Дополнительный сдвиг стажёра вправо для выравнивания позиций спрайтов */
+#intern.intern-offset {
+  transform: translateX(12px);
+}
+
+/* ==== РАЗРАБОТЧИК: справа (как стажёр/менеджер) ==== */
+#dev {
+  position: absolute;
+  bottom: -60px;
+  right: calc(50% - 300px);
+  width: 423px;
+  height: 677px;
+  object-fit: contain;
+  z-index: 3;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+#dev.visible {
+  opacity: 1;
+}
+
+/* ===== Вступление ===== */
+.dialogue-intro {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--container-W);
+  padding: var(--q-pad-y) var(--q-pad-x);
+  background: #fff;
+  border-radius: var(--q-radius);
+  border: 2px solid #000;
+  box-sizing: border-box;
+  text-align: left;
+  z-index: 4;
+}
+
+/* ===== Геймплей-капсула (236px, bottom 70px) ===== */
+#ui-capsule {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--safe-bottom) + var(--ui-bottom-offset));
+  width: var(--container-W);
+  height: var(--ui-box-h);
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--gap);
+  z-index: 5;
+  pointer-events: none;
+}
+
+#badges-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--badge-h);
+}
+
+#badge {
+  height: var(--badge-h);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--badge-pad-x);
+  background: #fff;
+  border-radius: var(--badge-radius);
+  border: 1px solid #000;
+  font-size: var(--fz-12);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: auto;
+}
+
+
+#badge-manager {
+  height: var(--badge-h);
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 var(--badge-pad-x);
+  background: #fff;
+  border-radius: var(--badge-radius);
+  border: 1px solid #000;
+  font-size: var(--fz-12);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: auto;
+  margin-left: auto;
+}
+
+#badge-manager.visible {
+  display: inline-flex;
+}
+
+/* Бейдж стажёра: как у менеджера, справа */
+#badge-intern {
+  height: var(--badge-h);
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 var(--badge-pad-x);
+  background: #fff;
+  border-radius: var(--badge-radius);
+  border: 1px solid #000;
+  font-size: var(--fz-12);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: auto;
+  margin-left: auto;
+}
+
+#badge-intern.visible {
+  display: inline-flex;
+}
+
+/* Бейдж разработчика: как у менеджера, справа */
+#badge-dev {
+  height: var(--badge-h);
+  display: none;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 var(--badge-pad-x);
+  background: #fff;
+  border-radius: var(--badge-radius);
+  border: 1px solid #000;
+  font-size: var(--fz-12);
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: auto;
+  margin-left: auto;
+}
+
+#badge-dev.visible {
+  display: inline-flex;
+}
+
+.dialogue-gameplay {
+  width: 100%;
+  padding: var(--q-pad-y) var(--q-pad-x);
+  background: #fff;
+  border-radius: var(--q-radius);
+  border: 1px solid #000;
+  box-sizing: border-box;
+  text-align: left;
+  max-height: var(--dialog-max-h);
+  overflow: visible;
+  pointer-events: auto;
+}
+
+/* Нет вариантов → диалог визуально занимает слот ответов */
+#ui-capsule.no-choices .dialogue-gameplay {
+  max-height: calc(var(--dialog-max-h) + var(--choices-slot-h));
+  margin-bottom: calc(-1 * var(--choices-slot-h));
+}
+
+#choices-slot {
+  width: 100%;
+  height: var(--choices-slot-h);
+}
+
+#choices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--choices-gap);
+  width: 100%;
+}
+
+#choices.hidden {
+  visibility: hidden;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  height: var(--choice-h);
+  width: 100%;
+  padding: 0 var(--q-pad-x);
+  background: #000;
+  color: #fff;
+  border-radius: var(--q-radius);
+  border: none;
+  font-family: var(--font);
+  font-size: var(--fz-16);
+  letter-spacing: var(--ls-16);
+  text-align: left;
+  cursor: pointer;
+  transition: transform .18s ease;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.choice:active {
+  transform: scale(.99);
+}
+
+@media (max-height: 700px) {
+  :root {
+    --ui-bottom-offset: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-layer,
+  #scene-dimmer,
+  .choice {
+    transition: none;
+  }
+}

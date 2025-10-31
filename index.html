@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Designer Sim — Дом (мягкий фон, без анимации персонажа)</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="stage">
+
+    <!-- Водяной знак -->
+    <div class="watermark">design.kudry</div>
+
+    <!-- Фон (2 слоя) + затемнение -->
+    <div id="scene-stack">
+      <img id="sceneA" class="scene-layer is-active" src="assets/background-home.png" alt="">
+      <img id="sceneB" class="scene-layer"           src="assets/background-home.png" alt="">
+      <div id="scene-dimmer"></div>
+    </div>
+
+    <!-- Персонаж (один слой, без анимации) -->
+    <img id="character" src="assets/girl-default.png" alt="character" />
+    
+    <!-- Второй персонаж (менеджер справа) -->
+    <img id="manager" src="assets/manager-default.png" alt="manager" />
+
+  <!-- Стажёр (как менеджер, справа) -->
+  <img id="intern" src="assets/intern-default.png" alt="intern" />
+
+    <!-- Разработчик (как менеджер, справа) -->
+    <img id="dev" src="assets/dev-default.png" alt="dev" />
+
+    <!-- Капсула 236px -->
+    <div id="ui-capsule">
+      <div id="badges-row">
+        <div id="badge">Продуктовый дизайнер</div>
+        <div id="badge-manager">Менеджер</div>
+        <div id="badge-intern">Стажёрик</div>
+        <div id="badge-dev">Разработчик</div>
+      </div>
+      <div id="dialogue" class="dialogue-gameplay"></div>
+      <div id="choices-slot">
+        <div id="choices" class="hidden">
+          <button class="choice" onclick="workFromHome()">Работать удаленно</button>
+          <button class="choice" onclick="goToOffice()">Пойти в офис</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Интро -->
+    <div id="intro" class="dialogue-intro"></div>
+
+    <!-- Секция финальных экранов (скрыта по умолчанию) -->
+    <div id="ending-section" style="display: none;">
+      <div class="ending-stack" id="ending"></div>
+      <div class="ending-actions hidden">
+        <button class="choice" onclick="replayGame()">Сыграть ещё раз</button>
+      </div>
+    </div>
+  </div>
+
+<style>
+  /* Стили для финальных экранов */
+  .ending-stack {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 60px;
+    bottom: var(--safe-bottom);
+    width: var(--container-W);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 6;
+    pointer-events: none;
+  }
+  .ending-card {
+    background: #fff;
+    border-radius: var(--q-radius);
+    border: 2px solid #000;
+    padding: var(--q-pad-y) var(--q-pad-x);
+    text-align: center;
+    box-sizing: border-box;
+    pointer-events: auto;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+  .ending-card.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .ending-header {
+    text-align: center;
+  }
+  .ending-icon {
+    display: block;
+    margin: 0 auto 0;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+  .ending-title {
+    margin: 0 0 0px;
+    font-weight: 700;
+    text-align: center;
+    font-size: 18px;
+    line-height: var(--lh-16);
+  }
+  .ending-subtitle {
+    margin: 0;
+    opacity: 0.9;
+    text-align: center;
+    font-style: italic;
+    font-size: 15px;
+  }
+  .ending-actions {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(var(--safe-bottom) + 16px);
+    width: var(--container-W);
+    z-index: 7;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+  .ending-actions.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .ending-actions .choice {
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+    justify-content: center;
+  }
+</style>
+
+<script src="game.js"></script>
+</body>
+</html>
