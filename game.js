@@ -671,14 +671,12 @@ function renderEnding(data) {
   img.className = 'ending-icon';
   img.width = 100; img.height = 100;
   img.alt = data.title || '';
-  // Resolve best format (WebP/PNG) for the icon
+  // Resolve best format (WebP/PNG) for the icon (fast path: try .webp immediately, fallback to original)
   (function(){
     const src = data.icon || 'assets/aesthete.png';
-    if (typeof resolveImageSrc === 'function') {
-      resolveImageSrc(src).then(best => { img.src = best; });
-    } else {
-      img.src = src;
-    }
+    const webp = src.endsWith('.png') ? src.replace(/\.png$/i, '.webp') : src;
+    img.src = webp;
+    img.onerror = () => { img.src = src; };
   })();
 
   const h = document.createElement('h3');
