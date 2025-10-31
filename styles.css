@@ -72,6 +72,23 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: #000;
+}
+
+/* Loading screen */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+body.loaded::before {
+  opacity: 0;
 }
 
 #stage {

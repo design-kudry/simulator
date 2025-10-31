@@ -4,6 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Design Simulator</title>
+<!-- Preload критичных ресурсов для быстрой загрузки -->
+<link rel="preload" as="image" href="assets/background-home.webp" type="image/webp">
+<link rel="preload" as="image" href="assets/girl-default.webp" type="image/webp">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,24 +17,22 @@
 
     <!-- Фон (2 слоя) + затемнение -->
     <div id="scene-stack">
-      <img id="sceneA" class="scene-layer is-active" src="assets/background-home.png" alt="">
-      <img id="sceneB" class="scene-layer"           src="assets/background-home.png" alt="">
+      <img id="sceneA" class="scene-layer is-active" src="assets/background-home.webp" alt="">
+      <img id="sceneB" class="scene-layer"           src="assets/background-home.webp" alt="">
       <div id="scene-dimmer"></div>
     </div>
 
     <!-- Персонаж (один слой, без анимации) -->
-    <img id="character" src="assets/girl-default.png" alt="character" />
+    <img id="character" src="assets/girl-default.webp" alt="character" />
     
     <!-- Второй персонаж (менеджер справа) -->
-    <img id="manager" src="assets/manager-default.png" alt="manager" />
+    <img id="manager" src="assets/manager-default.webp" alt="manager" />
 
   <!-- Стажёр (как менеджер, справа) -->
-  <img id="intern" src="assets/intern-default.png" alt="intern" />
+  <img id="intern" src="assets/intern-default.webp" alt="intern" />
 
-    <!-- Разработчик (как менеджер, справа) -->
-    <img id="dev" src="assets/dev-default.png" alt="dev" />
-
-    <!-- Капсула 236px -->
+  <!-- Разработчик (как менеджер, справа) -->
+    <img id="dev" src="assets/dev-default.webp" alt="dev" />    <!-- Капсула 236px -->
     <div id="ui-capsule">
       <div id="badges-row">
         <div id="badge">Продуктовый дизайнер</div>
