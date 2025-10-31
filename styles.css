@@ -39,7 +39,7 @@
   
   --choice-h: 56px;
   --choices-gap: 8px;
-  --gap: 4px;
+  --gap: 8px; /* Единый отступ между диалогом и выборами */
 
   --safe-bottom: max(16px, env(safe-area-inset-bottom));
 
