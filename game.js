@@ -154,6 +154,14 @@ function hideManager() {
 /* ===== Сцена 5: Вечер и питч менеджера ===== */
 function startScene5() {
   // Переход из сцены 4, фон оставляем как есть сначала
+  // Отслеживание прохождения сцены 5
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'scene_reached', {
+      'event_category': 'progress',
+      'event_label': 'scene_5',
+      'scene_number': 5
+    });
+  }
   hideDev && hideDev();
   hideManager && hideManager();
   hideCapsule();
@@ -687,29 +695,20 @@ function renderEnding(data) {
   });
 }
 
-// Пошаговое открытие карточек
-let currentStep = 0;
-const totalSteps = 4; // header + 3 blocks
-
-function revealNext() {
-  const cards = document.querySelectorAll('.ending-card');
+// Показать кнопку по клику/табу
+function revealButton() {
   const actionsBtn = document.querySelector('.ending-actions');
-  
-  if (currentStep < cards.length) {
-    cards[currentStep].classList.remove('hidden');
-    currentStep++;
-  } else if (currentStep === totalSteps && actionsBtn) {
+  if (actionsBtn) {
     actionsBtn.classList.remove('hidden');
-    currentStep++;
-    document.body.removeEventListener('click', revealNext);
-    document.body.removeEventListener('keydown', revealNextKey);
+    document.body.removeEventListener('click', revealButton);
+    document.body.removeEventListener('keydown', revealButtonKey);
   }
 }
 
-function revealNextKey(e) {
+function revealButtonKey(e) {
   if (e.code === 'Space' || e.code === 'Tab' || e.key === ' ' || e.key === 'Tab') {
     e.preventDefault();
-    revealNext();
+    revealButton();
   }
 }
 
@@ -758,6 +757,24 @@ function showArchetype() {
   console.log('User vector:', userVector);
   console.log('Selected archetype:', selectedArchetype, 'with distance:', minDistance);
   
+  // Отслеживание завершения игры с результатом архетипа
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'game_complete', {
+      'event_category': 'game',
+      'event_label': 'finished',
+      'archetype': archetypes[selectedArchetype].name,
+      'archetype_id': selectedArchetype,
+      'extroversion': state.extroversion,
+      'introversion': state.introversion,
+      'empathy': state.empathy,
+      'indifference': state.indifference,
+      'toxicity': state.toxicity,
+      'awareness': state.awareness,
+      'perfectionism': state.perfectionism,
+      'pragmatism': state.pragmatism
+    });
+  }
+  
   // Скрываем игровой интерфейс
   intro.style.display = 'none';
   hideCapsule();
@@ -772,14 +789,17 @@ function showArchetype() {
   // Рендерим выбранную концовку
   renderEnding(endings[selectedArchetype]);
   
-  // Прячем кнопку действий
+  // Показываем все карточки сразу
+  const cards = document.querySelectorAll('.ending-card');
+  cards.forEach(card => card.classList.remove('hidden'));
+  
+  // Прячем кнопку действий и ждем клика чтобы показать
   const actionsBtn = document.querySelector('.ending-actions');
   if (actionsBtn) actionsBtn.classList.add('hidden');
   
-  // Сбрасываем счётчик и подключаем обработчики
-  currentStep = 0;
-  document.body.addEventListener('click', revealNext);
-  document.body.addEventListener('keydown', revealNextKey);
+  // Подключаем обработчики для показа кнопки
+  document.body.addEventListener('click', revealButton);
+  document.body.addEventListener('keydown', revealButtonKey);
 }
 
 function replayGame() {
@@ -965,6 +985,14 @@ function nextIntro() {
 }
 
 function startGameplay() {
+  // Отслеживание начала игры
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'game_start', {
+      'event_category': 'game',
+      'event_label': 'gameplay_started'
+    });
+  }
+
   hideIntro();
 
   showCharacter();
@@ -1013,18 +1041,22 @@ function goToOffice() {
 }
 
 function startScene1() {
+  // Отслеживание прохождения сцены 1
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'scene_reached', {
+      'event_category': 'progress',
+      'event_label': 'scene_1',
+      'scene_number': 1
+    });
+  }
+
   changeScene('assets/background-office.png'); // мягко + медленно
   hideCapsule();
   hideCharacter();
 
-  // сначала просто показываем фон
-  onNextClick(showOfficeText);
-}
-
-function showOfficeText() {
+  // Сразу показываем текст вместе с фоном
   intro.style.display = 'block';
   showIntro('Вот ты\u00A0и\u00A0оказался в\u00A0любимом офисе');
-
   onNextClick(showScene1Part2);
 }
 
@@ -1047,17 +1079,20 @@ function startCoffeeScene() {
   changeScene('assets/background-coffeepoint.png');
   hideCapsule();
   hideCharacter();
-  onNextClick(coffeeIntro1);
-}
-
-function coffeeIntro1() {
+  
+  // Сразу показываем текст
   intro.style.display = 'block';
   showIntro('Ты\u00A0заходишь на\u00A0кухню. Пахнет тостами, кто-то спорит у\u00A0кофемашины');
   onNextClick(coffeeIntro2);
 }
 
 function coffeeIntro2() {
-  showIntro('И\u00A0вдруг ты\u00A0слышишь знакомую фразу:\n«А\u00A0у\u00A0нас премии вообще ещё бывают или это легенда?»');
+  showIntro('И\u00A0вдруг ты\u00A0слышишь знакомую фразу');
+  onNextClick(coffeeIntro3);
+}
+
+function coffeeIntro3() {
+  showIntro('«А\u00A0у\u00A0нас премии вообще ещё бывают или это миф?»');
   onNextClick(coffeeChoice1);
 }
 
@@ -1136,10 +1171,8 @@ function endOfCoffeeScene() {
   changeScene('assets/background-desktop.png');
   hideCapsule();
   hideCharacter();
-  onNextClick(scene1Finale);
-}
-
-function scene1Finale() {
+  
+  // Сразу показываем текст
   intro.style.display = 'block';
   showIntro('После короткой разминки утро набирает обороты. На\u00A0экране уже мигают задачи\u00A0— день начинается по-настоящему');
   onNextClick(scene1Done);
@@ -1151,8 +1184,23 @@ function scene1Done() {
   startScene2();
 }
 
+function scene1Done() {
+  // Сцена 1 завершена, переход к сцене 2
+  intro.style.display = 'none';
+  startScene2();
+}
+
 /* ===== Сцена 2: Встреча ===== */
 function startScene2() {
+  // Отслеживание прохождения сцены 2
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'scene_reached', {
+      'event_category': 'progress',
+      'event_label': 'scene_2',
+      'scene_number': 2
+    });
+  }
+
   showCharacter();
   setCharacter('assets/girl-default.png');
   showCapsule();
@@ -1221,23 +1269,27 @@ function scene2BeforeMeeting() {
     changeScene('assets/background-meeting.png');
     hideCapsule();
     hideCharacter();
-    onNextClick(meetingIntro1);
+    
+    // Сразу показываем первый текст встречи
+    showManager();
+    setManager('assets/manager-default.png');
+    showCapsule();
+    setDialogue('Коллеги, время поджимает. Нужно быстро пройтись по\u00A0вариантам и\u00A0выбрать рабочий');
+    hideChoicesKeepSlot();
+    onNextClick(meetingIntro2);
   });
 }
 
-function startMeetingScene() {
+function meetingIntro2() {
   hideCapsule();
-  hideCharacter();
-  onNextClick(meetingIntro1);
-}
-
-function meetingIntro1() {
-  showManager();
-  setManager('assets/manager-default.png');
+  hideManager();
+  showCharacter();
+  setCharacter('assets/girl-default.png');
   showCapsule();
-  setDialogue('Коллеги, время поджимает. Нужно быстро пройтись по\u00A0вариантам и\u00A0выбрать рабочий');
+  setDialogue('Ну\u00A0конечно, "быстро определимся", а\u00A0потом ещё месяц будем чинить баги');
+  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   hideChoicesKeepSlot();
-  onNextClick(meetingIntro2);
+  onNextClick(meetingIntro3);
 }
 
 function meetingIntro2() {
@@ -1466,6 +1518,15 @@ function scene2Done() {
 
 /* ===== Сцена 3: Обед и стажёр ===== */
 function startScene3() {
+  // Отслеживание прохождения сцены 3
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'scene_reached', {
+      'event_category': 'progress',
+      'event_label': 'scene_3',
+      'scene_number': 3
+    });
+  }
+
   changeScene('assets/background-office.png');
   hideCapsule();
   hideCharacter();
@@ -1657,7 +1718,7 @@ function scene3LaterIntern3() {
   hideCharacter();
   hideIntern();
   intro.style.display = 'block';
-  showIntro('Стажёрик молча уходит. Ты ещё пару секунд смотришь в экран\u00A0— но всё уже не так важно');
+  showIntro('Стажёрик молча уходит. Ты ещё пару секунд смотришь в тарелку\u00A0— но всё уже не так важно');
   onNextClick(scene3Reflect);
 }
 
@@ -1736,13 +1797,16 @@ function startDesktopScene() {
   changeScene('assets/background-desktop.png');
   hideCapsule();
   hideCharacter();
-  onNextClick(desktopIntro1);
-}
-
-function desktopIntro1() {
+  
+  // Сразу показываем текст
   intro.style.display = 'block';
   showIntro('Ты\u00A0открываешь почту\u00A0— двадцать непрочитанных, три "важных", и\u00A0одно письмо с\u00A0пометкой «Срочно». Открываешь');
   onNextClick(desktopIntro2);
+}
+
+function desktopIntro2() {
+  showIntro('«Всё супер, только можешь сделать кнопки побольше и\u00A0убрать лишние отступы? Хочется, чтобы "дышало", но не слишком»');
+  onNextClick(desktopIntro3);
 }
 
 function desktopIntro2() {
@@ -1837,6 +1901,15 @@ function checkEmail() {
 
 /* ---------- Сцена 4: разработчик и чат ---------- */
 function startScene4() {
+  // Отслеживание прохождения сцены 4
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'scene_reached', {
+      'event_category': 'progress',
+      'event_label': 'scene_4',
+      'scene_number': 4
+    });
+  }
+
   // Фон уже на десктопе из предыдущей сцены — без затемнения и смены сцены
   hideCapsule();
   hideCharacter();
