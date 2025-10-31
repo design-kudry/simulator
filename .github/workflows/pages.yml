@@ -20,6 +20,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install WebP tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webp
+      - name: Convert PNG assets to WebP (lossy q=80)
+        run: |
+          set -e
+          if [ -d assets ]; then
+            find assets -type f -name "*.png" -print0 | xargs -0 -I{} bash -c 'f="{}"; out="${f%.*}.webp"; cwebp -quiet -q 80 "$f" -o "$out" || true'
+          fi
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

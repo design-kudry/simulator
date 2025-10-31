@@ -39,17 +39,41 @@ function addPoint(trait) {
   // console.debug('state', state);
 }
 
+/* ---------- изображения: выбор лучшего формата (WebP с откатом на PNG) ---------- */
+const __srcCache = new Map(); // cache png->resolvedSrc (webp|png)
+
+function resolveImageSrc(srcPng) {
+  // Fast path from cache
+  if (__srcCache.has(srcPng)) return Promise.resolve(__srcCache.get(srcPng));
+  // only replace .png -> .webp when applicable
+  const webpSrc = srcPng.endsWith('.png') ? srcPng.replace(/\.png$/i, '.webp') : null;
+  // Try WebP first (if applicable), then fallback to original
+  return new Promise((resolve) => {
+    if (!webpSrc) {
+      __srcCache.set(srcPng, srcPng);
+      return resolve(srcPng);
+    }
+    const probe = new Image();
+    probe.onload = () => { __srcCache.set(srcPng, webpSrc); resolve(webpSrc); };
+    probe.onerror = () => { __srcCache.set(srcPng, srcPng); resolve(srcPng); };
+    probe.src = webpSrc;
+  });
+}
+
 /* ---------- фон: медленный кроссфейд + затемнение только фона ---------- */
 let activeScene = sceneA, backScene = sceneB;
 
 function changeScene(src) {
   dimmer.classList.add('is-on'); // затемняем фон
-  const img = new Image();
-  img.src = src;
-  img.decode ? img.decode().then(apply) : (img.onload = apply);
+  resolveImageSrc(src).then((bestSrc) => {
+    const img = new Image();
+    img.src = bestSrc;
+    const done = () => apply(bestSrc);
+    img.decode ? img.decode().then(done) : (img.onload = done);
+  });
 
-  function apply() {
-    backScene.src = src;
+  function apply(best) {
+    backScene.src = best;
     requestAnimationFrame(() => {
       activeScene.classList.remove('is-active');
       backScene.classList.add('is-active');
@@ -65,10 +89,12 @@ function changeScene(src) {
 
 /* ---------- персонаж: без анимации (мгновенная замена), но без мигания ---------- */
 function setCharacter(src) {
-  if (character.src && character.src.endsWith(src)) return;
-  const img = new Image();
-  img.src = src;
-  img.decode ? img.decode().then(() => { character.src = src; }) : (img.onload = () => { character.src = src; });
+  resolveImageSrc(src).then((best) => {
+    if (character.src && character.src.endsWith(best)) return;
+    const img = new Image();
+    img.src = best;
+    img.decode ? img.decode().then(() => { character.src = best; }) : (img.onload = () => { character.src = best; });
+  });
 }
 
 function showCharacter() {
@@ -89,10 +115,12 @@ function hideCharacter() {
 
 /* ---------- менеджер: справа ---------- */
 function setManager(src) {
-  if (manager.src && manager.src.endsWith(src)) return;
-  const img = new Image();
-  img.src = src;
-  img.decode ? img.decode().then(() => { manager.src = src; }) : (img.onload = () => { manager.src = src; });
+  resolveImageSrc(src).then((best) => {
+    if (manager.src && manager.src.endsWith(best)) return;
+    const img = new Image();
+    img.src = best;
+    img.decode ? img.decode().then(() => { manager.src = best; }) : (img.onload = () => { manager.src = best; });
+  });
 }
 
 function showManager() {
@@ -761,10 +789,12 @@ function setIntern(src) {
     intern.classList.remove('intern-offset');
   }
 
-  if (intern.src && intern.src.endsWith(src)) return;
-  const img = new Image();
-  img.src = src;
-  img.decode ? img.decode().then(() => intern.src = src) : (img.onload = () => intern.src = src);
+  resolveImageSrc(src).then((best) => {
+    if (intern.src && intern.src.endsWith(best)) return;
+    const img = new Image();
+    img.src = best;
+    img.decode ? img.decode().then(() => intern.src = best) : (img.onload = () => intern.src = best);
+  });
 }
 
 function showIntern() {
@@ -787,10 +817,12 @@ function hideIntern() {
 
 /* ---------- разработчик: справа ---------- */
 function setDev(src) {
-  if (dev.src && dev.src.endsWith(src)) return;
-  const img = new Image();
-  img.src = src;
-  img.decode ? img.decode().then(() => { dev.src = src; }) : (img.onload = () => { dev.src = src; });
+  resolveImageSrc(src).then((best) => {
+    if (dev.src && dev.src.endsWith(best)) return;
+    const img = new Image();
+    img.src = best;
+    img.decode ? img.decode().then(() => { dev.src = best; }) : (img.onload = () => { dev.src = best; });
+  });
 }
 
 function showDev() {
