@@ -25,8 +25,9 @@
       send_page_view: true,
       anonymize_ip: true
     });
-    // Optional visible badge in debug mode to reassure tracking is on
-    if (isDebug) {
+    // Optional visible badge in debug mode (off by default). Enable with ?ga_badge=1
+    var showBadge = params.get('ga_badge') === '1';
+    if (isDebug && showBadge) {
       var badge = document.createElement('div');
       badge.textContent = 'GA4 debug ON';
       badge.style.cssText = 'position:fixed;left:8px;bottom:8px;padding:4px 8px;background:#000;color:#fff;font:12px/1.2 -apple-system,system-ui,Segoe UI,Roboto,Arial,sans-serif;border-radius:6px;opacity:.7;z-index:9999;pointer-events:none;';

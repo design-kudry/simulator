@@ -671,7 +671,15 @@ function renderEnding(data) {
   img.className = 'ending-icon';
   img.width = 100; img.height = 100;
   img.alt = data.title || '';
-  img.src = data.icon || 'assets/aesthete.png';
+  // Resolve best format (WebP/PNG) for the icon
+  (function(){
+    const src = data.icon || 'assets/aesthete.png';
+    if (typeof resolveImageSrc === 'function') {
+      resolveImageSrc(src).then(best => { img.src = best; });
+    } else {
+      img.src = src;
+    }
+  })();
 
   const h = document.createElement('h3');
   h.className = 'ending-title';
