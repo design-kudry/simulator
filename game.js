@@ -233,7 +233,7 @@ function scene4ReviewIndifference() {
   addPoint('indifference');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
-  setDialogue('Выглядит норм, работает, не разваливается, а это уже победа');
+  setDialogue('Выглядит норм, работает, не разваливается, а это уже победа');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   onNextClick(() => {
     setDialogue('Не всегда нужно влезать. Иногда можно просто пройти мимо');
@@ -528,6 +528,7 @@ function finaleProcessing1() {
   hideCapsule();
   hideCharacter();
   intro.style.display = 'block';
+  intro.classList.add('centered-text'); // Центрируем текст для loading экранов
   showIntro('Обработка данных…');
   onNextClick(finaleProcessing2);
 }
@@ -539,7 +540,10 @@ function finaleProcessing2() {
 
 function finaleProcessing3() {
   showIntro('Подбор архетипа…');
-  onNextClick(showArchetype);
+  onNextClick(() => {
+    intro.classList.remove('centered-text'); // Убираем центрирование после loading экранов
+    showArchetype();
+  });
 }
 
 /* ===== Данные финальных экранов ===== */

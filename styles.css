@@ -259,6 +259,11 @@ body.loaded::before {
   z-index: 4;
 }
 
+/* Центрированный текст для экранов загрузки (обработка данных и т.д.) */
+.dialogue-intro.centered-text {
+  text-align: center;
+}
+
 /* ===== Геймплей-капсула (236px, bottom 70px) ===== */
 #ui-capsule {
   position: absolute;
