@@ -222,9 +222,9 @@ body {
 /* ===== Вступление ===== */
 .dialogue-intro {
   position: absolute;
-  top: 50%;
+  top: 140px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   width: var(--container-W);
   padding: var(--q-pad-y) var(--q-pad-x);
   background: #fff;
