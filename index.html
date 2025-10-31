@@ -8,10 +8,38 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-C7BHS2F2DD"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-C7BHS2F2DD');
+  // GA4 basic setup + optional DebugView toggle via ?ga_debug=1
+  (function(){
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+
+    var params = new URLSearchParams(location.search);
+    var isDebug = params.has('ga_debug') || params.get('debug') === '1';
+    // expose for game.js optional console logging
+    window.__GA_DEBUG__ = isDebug;
+
+    gtag('config', 'G-C7BHS2F2DD', {
+      debug_mode: isDebug,
+      send_page_view: true,
+      anonymize_ip: true
+    });
+  })();
+  
+  // Tiny helper for consistent event sending + optional console echo
+  window.trackEvent = function(name, params){
+    try {
+      if (typeof gtag === 'function') {
+        gtag('event', name, params || {});
+      }
+      if (window.__GA_DEBUG__) {
+        console.log('[GA4]', name, params || {});
+      }
+    } catch (e) {
+      if (window.__GA_DEBUG__) console.warn('[GA4 error]', e);
+    }
+  };
 </script>
 
 <!-- Preload критичных ресурсов для быстрой загрузки -->
