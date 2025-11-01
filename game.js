@@ -222,7 +222,7 @@ function scene4ReviewStart() {
   setCharacter('assets/girl-default.png');
   showCapsule();
   setDialogue('Погнали...');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   showChoicesHTML(`
     <button class="choice" onclick="scene4ReviewEmpathy()">Пройдусь по всему</button>
     <button class="choice" onclick="scene4ReviewIndifference()">И так сойдёт</button>
@@ -234,13 +234,13 @@ function scene4ReviewEmpathy() {
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
   setDialogue('В целом всё ок, есть пара мелких моментов. Соберу пару скринов, оформлю док');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(() => {
     setDialogue('Здесь ок, но шрифт съехал. Тут иконка фоткой. Переход дёргается. Мелочь, но видно');
-    dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
     onNextClick(() => {
       setDialogue('Лучше сказать сейчас, чем потом искать виноватых');
-      dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
       hideChoicesKeepSlot();
       onNextClick(scene4Finale);
     });
@@ -254,10 +254,10 @@ function scene4ReviewIndifference() {
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
   setDialogue('Выглядит норм, работает, не разваливается, а это уже победа');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(() => {
     setDialogue('Не всегда нужно влезать. Иногда можно просто пройти мимо');
-    dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
     hideChoicesKeepSlot();
     onNextClick(scene4Finale);
   });
@@ -269,7 +269,7 @@ function scene5Reflect1() {
   setCharacter('assets/girl-default.png');
   showCapsule();
   setDialogue('Кажется, это был норм день. Или нет?..');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5Approach);
 }
@@ -1814,7 +1814,7 @@ function startDesktopScene() {
   
   // Сразу показываем текст
   intro.style.display = 'block';
-  showIntro('Ты\u00A0открываешь почту\u00A0— двадцать непрочитанных, три "важных", и\u00A0одно письмо с\u00A0пометкой «Срочно». Открываешь');
+  showIntro('Ты\u00A0открываешь почту\u00A0— двадцать непрочитанных, три "важных", и\u00A0одно письмо с\u00A0пометкой «Срочно»');
   onNextClick(desktopIntro2);
 }
 
