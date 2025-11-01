@@ -304,7 +304,7 @@ function scene5GirlReact() {
   showCharacter();
   setCharacter('assets/girl-surprise.png');
   setDialogue('Ого. Это бред… или прорыв?..');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5ChoiceStart);
 }
@@ -374,7 +374,7 @@ function scene5GirlReacts2() {
   showCapsule();
   setCharacter('assets/girl-surprise.png');
   setDialogue('Господи… Ну и дичь');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5GirlReacts3);
 }
@@ -382,7 +382,7 @@ function scene5GirlReacts2() {
 function scene5GirlReacts3() {
   setCharacter('assets/girl-smile.png');
   setDialogue('Но подано уверенно');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5GirlAdvice1);
 }
@@ -437,7 +437,7 @@ function scene5Reflect3() {
   showCharacter();
   setCharacter('assets/girl-default.png');
   setDialogue('Да, ну и денёк...');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5Reflect4);
 }
@@ -445,7 +445,7 @@ function scene5Reflect3() {
 function scene5Reflect4() {
   setCharacter('assets/girl-default.png');
   setDialogue('На самом деле хорошо, что у людей есть мечты');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5Reflect5);
 }
@@ -453,7 +453,7 @@ function scene5Reflect4() {
 function scene5Reflect5() {
   setCharacter('assets/girl-default.png');
   setDialogue('А вдруг в этом что-то есть?');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   showChoicesHTML(`
     <button class="choice" onclick="scene5Awareness()">Чёрт, а ведь может есть</button>
     <button class="choice" onclick="scene5Toxic()">Бред сумасшедшего</button>
@@ -465,10 +465,10 @@ function scene5Awareness() {
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
   setDialogue('Идея безумная, но в ней что-то цепляет');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(() => {
     setDialogue('Запишу на всякий случай');
-    dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
     onNextClick(scene5WrapUp);
   });
 }
@@ -478,10 +478,10 @@ function scene5Toxic() {
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
   setDialogue('Идея из вселенной, где люди платят криптой за капучино');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(() => {
     setDialogue('Хотя, кажется, люди и правда платят криптой за кофе…');
-    dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
     onNextClick(scene5WrapUp);
   });
 }
@@ -489,11 +489,11 @@ function scene5Toxic() {
 function scene5WrapUp() {
   setCharacter('assets/girl-default.png');
   setDialogue('А теперь пора закрывать ноут');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(() => {
     setDialogue('Хватит подвигов на сегодня');
-    dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
     hideChoicesKeepSlot();
     onNextClick(startFinaleSequence);
   });
@@ -525,7 +525,7 @@ function finaleReflect1() {
   setCharacter('assets/girl-default.png');
   showCapsule();
   setDialogue('Вот и все');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(finaleReflect2);
 }
@@ -1909,7 +1909,7 @@ function checkEmail() {
   addPoint('introversion');
   hideChoicesKeepSlot();
   setDialogue('Так, никакой болтовни, только я и эти 1829110 писем');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(startDesktopScene);
 }
 
