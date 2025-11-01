@@ -198,7 +198,7 @@ function scene4ReviewGirlAgree() {
 function scene4ReviewGirlFeel() {
   setCharacter('assets/girl-default.png');
   setDialogue('Всегда интересно, что получилось, но и немного страшно...');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene4ReviewIntro1);
 }
@@ -312,7 +312,8 @@ function scene5GirlReact() {
 function scene5ChoiceStart() {
   setCharacter('assets/girl-default.png');
   setDialogue('Что ответить?');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  // Без кавычек и курсива — обычный текст
+  dialogue.innerHTML = dialogue.textContent;
   showChoicesHTML(`
     <button class="choice" onclick="scene5ChoiceYes()">Ну давай, расскажи</button>
     <button class="choice" onclick="scene5ChoiceNo()">Чувак, я так устала…</button>
@@ -531,7 +532,8 @@ function finaleReflect1() {
 
 function finaleReflect2() {
   setDialogue('Спасибо, что был мной весь день. И респект, что дошёл до конца');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  // Без кавычек и курсива — обычный текст
+  dialogue.innerHTML = dialogue.textContent;
   hideChoicesKeepSlot();
   onNextClick(finaleReflect3);
 }
@@ -1276,13 +1278,19 @@ function scene2BeforeMeeting() {
     hideCapsule();
     hideCharacter();
     
-    // Сразу показываем первый текст встречи
-    showManager();
-    setManager('assets/manager-default.png');
-    showCapsule();
-    setDialogue('Коллеги, время поджимает. Нужно быстро пройтись по\u00A0вариантам и\u00A0выбрать рабочий');
-    hideChoicesKeepSlot();
-    onNextClick(meetingIntro2);
+    // Интро-экран в переговорке перед репликой менеджера
+    intro.style.display = 'block';
+    showIntro('Ты заходишь, киваешь. Поехали');
+    onNextClick(() => {
+      intro.style.display = 'none';
+      // Сразу показываем первый текст встречи
+      showManager();
+      setManager('assets/manager-default.png');
+      showCapsule();
+      setDialogue('Коллеги, время поджимает. Нужно быстро пройтись по\u00A0вариантам и\u00A0выбрать рабочий');
+      hideChoicesKeepSlot();
+      onNextClick(meetingIntro2);
+    });
   });
 }
 
