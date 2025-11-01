@@ -183,6 +183,22 @@
     text-align: center;
     justify-content: center;
   }
+  /* --- Asset protection: disable save/drag for images --- */
+  #sceneA,
+  #sceneB,
+  #character,
+  #manager,
+  #intern,
+  #dev,
+  .ending-card img {
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none; /* iOS long‑press menu */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none; /* not clickable, prevents long‑press save */
+  }
 </style>
 
 <script src="game.js"></script>

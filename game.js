@@ -19,6 +19,41 @@ const badge = document.getElementById('badge');
 const dev = document.getElementById('dev');
 const badgeDev = document.getElementById('badge-dev');
 
+/* ---------- hardening: prevent image saving/drag ---------- */
+(function protectAssets(){
+  try {
+    const scopeSel = '#sceneA, #sceneB, #character, #manager, #intern, #dev, .ending-card img';
+    const imgs = document.querySelectorAll(scopeSel + ', img');
+    imgs.forEach(img => {
+      img.setAttribute('draggable', 'false');
+      img.addEventListener('dragstart', (e) => e.preventDefault());
+    });
+    // Block context menu on images
+    document.addEventListener('contextmenu', (e) => {
+      const el = e.target;
+      if (el && (el.tagName === 'IMG' || el.closest('#scene-stack, #character, #manager, #intern, #dev'))) {
+        e.preventDefault();
+      }
+    });
+  } catch (e) { /* no-op */ }
+})();
+
+/* ---------- normalize: remove inline guillemets inside <em> ---------- */
+(function normalizeEmQuotes(){
+  if (!dialogue) return;
+  const strip = () => {
+    dialogue.querySelectorAll('em').forEach(em => {
+      const t = em.textContent || '';
+      const nt = t.replace(/^«/, '').replace(/»$/, '');
+      if (nt !== t) em.textContent = nt;
+    });
+  };
+  const mo = new MutationObserver(() => strip());
+  mo.observe(dialogue, { childList: true, subtree: true, characterData: true });
+  // initial pass
+  strip();
+})();
+
 /* ---------- состояние (скрытые очки) ---------- */
 const state = {
   // Соц-ориентация
@@ -398,6 +433,7 @@ function scene5GirlAdvice1() {
 function scene5GirlAdviceMain1() {
   setCharacter('assets/girl-default.png');
   setDialogue('Главное — никогда не сдавайся, иди к своей цели');
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5ManagerOut1);
 }
@@ -407,6 +443,7 @@ function scene5GirlAdviceMain2() {
   showCharacter();
   setCharacter('assets/girl-default.png');
   setDialogue('Но если будет слишком сложно — пофиг, сдавайся');
+  dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5ManagerOut2);
 }
@@ -1228,6 +1265,11 @@ function scene2Intro2() {
 function scene2Choice() {
   setDialogue('С\u00A0чего начать?');
   dialogue.innerHTML = dialogue.textContent;
+// Исправление: "Как провести этот священный час?" без кавычек и курсива
+function showSacredHour() {
+  setDialogue('Как провести этот священный час?');
+  dialogue.innerHTML = dialogue.textContent;
+}
   showChoicesHTML(`
     <button class="choice" onclick="scene2Choice1()">Планирую приоритеты в\u00A0трекере</button>
     <button class="choice" onclick="scene2Choice2()">Открываю Figma и\u00A0в\u00A0бой</button>
@@ -1565,7 +1607,8 @@ function scene3LunchQuestion() {
   setCharacter('assets/girl-default.png');
   showCapsule();
   setDialogue('Как провести этот священный час?');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  // Без курсива и кавычек для этого экрана
+  dialogue.innerHTML = dialogue.textContent;
   showChoicesHTML(`
     <button class="choice" onclick="scene3StayWork()">Остаться и\u00A0доделать макет</button>
     <button class="choice" onclick="scene3GoEat()">Если не\u00A0поем\u00A0— помру</button>
