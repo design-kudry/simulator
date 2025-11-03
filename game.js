@@ -197,15 +197,19 @@ function startScene5() {
       'scene_number': 5
     });
   }
-  hideDev && hideDev();
-  hideManager && hideManager();
+  if (typeof hideDev === 'function') hideDev();
+  if (typeof hideManager === 'function') hideManager();
+  if (typeof hideIntern === 'function') hideIntern();
   hideCapsule();
   hideCharacter();
-  showIntroScreen('Оставляешь чат, допиваешь остывший кофе и снова втыкаешь в ноут', scene5Intro2);
+  intro.style.display = 'block';
+  showIntro('Оставляешь чат, допиваешь остывший кофе и снова втыкаешь в ноут');
+  onNextClick(scene5Intro2);
 }
 
 function scene5Intro2() {
-  showIntroScreen('Что-то исправляешь, что-то комментируешь, кто-то что-то пишет', scene5Evening);
+  showIntro('Что-то исправляешь, что-то комментируешь, кто-то что-то пишет');
+  onNextClick(scene5Evening);
 }
 
 function scene5Evening() {
@@ -247,7 +251,7 @@ function scene4ReviewIntro1() {
 }
 
 function scene4ReviewIntro2() {
-  showIntro('Первый экран грузится медленно, но появляется');
+  showIntro('Первый экран грузится медленно, но появляется');
   onNextClick(scene4ReviewStart);
 }
 
@@ -288,7 +292,7 @@ function scene4ReviewIndifference() {
   addPoint('indifference');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
-  setDialogue('Выглядит норм, работает, не разваливается, а это уже победа');
+  setDialogue('Выглядит норм, работает, не разваливается, а это уже победа');
   dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(() => {
     setDialogue('Не всегда нужно влезать. Иногда можно просто пройти мимо');
@@ -313,7 +317,7 @@ function scene5Approach() {
   hideCapsule();
   hideCharacter();
   intro.style.display = 'block';
-  showIntro('Ты уже почти закрываешь ноут, как вдруг к тебе подходит коллега с горящими глазами');
+  showIntro('Ты уже почти закрываешь ноут, как вдруг к тебе подходит коллега с горящими глазами');
   onNextClick(scene5Pitch1);
 }
 
@@ -379,7 +383,7 @@ function scene5PlanIntro1() {
   hideCapsule();
   hideManager();
   intro.style.display = 'block';
-  showIntro('Он достаёт айпад, делает пару свайпов, включает тёмный экран с белым шрифтом:');
+  showIntro('Он достаёт айпад, делает пару свайпов, включает тёмный экран с белым шрифтом:');
   onNextClick(scene5PlanIntro2);
 }
 
@@ -389,7 +393,7 @@ function scene5PlanIntro2() {
 }
 
 function scene5PlanList1() {
-  showIntro('Платформа для ревью кофеен на основе нейросети');
+  showIntro('Платформа для ревью кофеен на основе нейросети');
   onNextClick(scene5PlanList2);
 }
 
@@ -432,7 +436,7 @@ function scene5GirlAdvice1() {
 
 function scene5GirlAdviceMain1() {
   setCharacter('assets/girl-default.png');
-  setDialogue('Главное — никогда не сдавайся, иди к своей цели');
+  setDialogue('Главное — никогда не сдавайся, иди к своей цели');
   dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5ManagerOut1);
@@ -481,7 +485,7 @@ function scene5Reflect3() {
 
 function scene5Reflect4() {
   setCharacter('assets/girl-default.png');
-  setDialogue('На самом деле хорошо, что у людей есть мечты');
+  setDialogue('На самом деле хорошо, что у людей есть мечты');
   dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5Reflect5);
@@ -568,7 +572,7 @@ function finaleReflect1() {
 }
 
 function finaleReflect2() {
-  setDialogue('Спасибо, что был мной весь день. И респект, что дошёл до конца');
+  setDialogue('Спасибо, что был мной весь день. И респект, что дошёл до конца');
   // Без кавычек и курсива — обычный текст
   dialogue.innerHTML = dialogue.textContent;
   hideChoicesKeepSlot();
@@ -613,9 +617,9 @@ const endings = [
     title: 'Эстет-террорист',
     subtitle: '«Я не токсик, просто вижу уродство»',
     blocks: [
-      'Можешь уничтожить концепт одной фразой. Делаешь божественно, но все страдают',
+      'Можешь уничтожить концепт одной фразой. Делаешь божественно, но все страдают',
       'Пиксели — идеальны.\nКоллеги — в терапии',
-      'Ты как ревью с огнемётом. Иконка Figma трясётся при входе',
+      'Ты как ревью с огнемётом. Иконка Figma трясётся при входе',
     ]
   },
   {
@@ -624,8 +628,8 @@ const endings = [
     title: 'Корпоративный ниндзя',
     subtitle: '«Я чиню мир, пока вы созваниваетесь»',
     blocks: [
-      'Ты не кричишь, не споришь, не давишь, но именно ты спасаешь проект, когда всё разваливается',
-      'Знаешь все паттерны, но никому их не навязываешь',
+      'Ты не кричишь, не споришь, не давишь, но именно ты спасаешь проект, когда всё разваливается',
+      'Знаешь все паттерны, но никому их не навязываешь',
       'Тебя не видно. Но если уйдёшь, все это почувствуют',
     ]
   },
@@ -637,18 +641,18 @@ const endings = [
     blocks: [
       'Ты называешь хаос «гибкостью». Врываешь дизайн-систему ради экспрессии',
       'Бесишь всех, но двигаешь продукт',
-      'Ты не согласен с ТЗ, но согласен с собой. Этого достаточно',
+      'Ты не согласен с ТЗ, но согласен с собой. Этого достаточно',
     ]
   },
   {
     id: 'skull',
     icon: 'assets/skull.png',
     title: 'Фигма-гуру на грани',
-    subtitle: '«Я все сделал и сейчас исчезну»',
+    subtitle: '«Я все сделал и сейчас исчезну»',
     blocks: [
-      'Если ты не выгорел в этом спринте — значит, не твой проект',
+      'Если ты не выгорел в этом спринте — значит, не твой проект',
       'Ты оформляешь за троих, думаешь за пятерых, умираешь в одиночку',
-      'Ты сделал красиво. Как всегда. Потому что не умеешь иначе',
+      'Ты сделал красиво. Как всегда. Потому что не умеешь иначе',
     ]
   },
   {
@@ -657,8 +661,8 @@ const endings = [
     title: 'Старший Интроверт по макетам',
     subtitle: '«Я молчу, потому что уже сделал»',
     blocks: [
-      'Ты не участвуешь в обсуждениях, ты их предотвращаешь',
-      'Все уже работает, но никто ещё не понял, что это благодаря тебе',
+      'Ты не участвуешь в обсуждениях, ты их предотвращаешь',
+      'Все уже работает, но никто ещё не понял, что это благодаря тебе',
       'Ты не интроверт. Ты просто уже видел, чем всё это заканчивается',
     ]
   },
@@ -670,7 +674,7 @@ const endings = [
     blocks: [
       'Ты хочешь, чтобы всё было понятно. Даже если придётся всё объяснить трижды',
       'Ты не придираешься. Ты восстанавливаешь справедливость',
-      'Всё просто, если сначала прочитать, а потом говорить',
+      'Всё просто, если сначала прочитать, а потом говорить',
     ]
   },
   {
@@ -679,7 +683,7 @@ const endings = [
     title: 'Креативный выгоревший',
     subtitle: '«Я всё ещё горю. Наверное...»',
     blocks: [
-      'Идеи есть всегда. Просто теперь они лежат и не двигаются',
+      'Идеи есть всегда. Просто теперь они лежат и не двигаются',
       'В команде тебя любят, но боятся однажды потерять',
       'Бро, помоги себе, пожалуйста. Ты всё ещё сияешь, просто через боль',
     ]
@@ -692,7 +696,7 @@ const endings = [
     blocks: [
       'Любая задача — это просто баг, который можно задокументировать',
       'Комменты пишешь заранее, потому что угадываешь чужие ошибки',
-      'Ты не против эмоций. Просто в регламенте их не было',
+      'Ты не против эмоций. Просто в регламенте их не было',
     ]
   }
 ];
@@ -1004,7 +1008,7 @@ function onNextClick(cb) {
 /* ---------- сценарий ---------- */
 const introDialogues = [
   'Привет, ты попал в симулятор продуктового дизайнера',
-  'Проживи этот день с кайфом, \nно помни, что все твои действия влияют на ход игры'
+  'Проживи этот день с кайфом, \nно помни, что все твои действия влияют на ход игры'
 ];
 let i = 0;
 
@@ -1407,7 +1411,7 @@ function meetingEmpathy() {
   addPoint('empathy');
   setCharacter('assets/girl-smile.png');
   hideChoicesKeepSlot();
-  setDialogue('Я понимаю, что времени мало, но если не протестим гипотезу на пользователях, снова будем переделывать');
+  setDialogue('Я понимаю, что времени мало, но если не протестим гипотезу на пользователях, снова будем переделывать');
   onNextClick(meetingEmpathyDebate1);
 }
 
@@ -1630,7 +1634,7 @@ function scene3StayWork() {
   addPoint('perfectionism');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
-  setDialogue('Планировала поесть — но взгляд зацепился за неровную сетку');
+  setDialogue('Планировала поесть — но взгляд зацепился за неровную сетку');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   onNextClick(scene3StayWork2);
 }
@@ -1645,7 +1649,7 @@ function scene3StayWork3() {
   hideCapsule();
   hideCharacter();
   intro.style.display = 'block';
-  showIntro('Коллеги зовут в столовку — ты киваешь, не отрываясь от макета, но всё-таки идёшь');
+  showIntro('Коллеги зовут в столовку — ты киваешь, не отрываясь от макета, но всё-таки идёшь');
   onNextClick(scene3GoCafeteria);
 }
 
@@ -1712,7 +1716,7 @@ function scene3HelpIntern() {
   addPoint('empathy');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
-  setDialogue('Да, конечно. Покажи, что не получается?');
+  setDialogue('Да, конечно. Покажи, что не получается?');
   onNextClick(scene3HelpIntern2);
 }
 
@@ -1795,7 +1799,7 @@ function scene3Reflect() {
   showCharacter();
   setCharacter('assets/girl-sad.png');
   showCapsule();
-  setDialogue('А ведь когда-то и я сидела так же — с кривой сеткой, в панике и с сгорающим дедлайном');
+  setDialogue('А ведь когда-то и я сидела так же — с кривой сеткой, в панике и с сгорающим дедлайном');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   onNextClick(scene3Reflect2);
 }
@@ -1809,14 +1813,14 @@ function scene3Reflect2() {
 
 function scene3Reflect2b() {
   setCharacter('assets/girl-sad.png');
-  setDialogue('О как');
+  setDialogue('О как');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   onNextClick(scene3Reflect3);
 }
 
 function scene3Reflect3() {
     setCharacter('assets/girl-default.png');
-  setDialogue('Так, ладно, обед закончился, пора и честь знать');
+  setDialogue('Так, ладно, обед закончился, пора и честь знать');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   onNextClick(scene3WrapUpIntro);
 }
@@ -1878,7 +1882,7 @@ function desktopIntro2() {
 }
 
 function desktopIntro2() {
-  showIntro('«Всё супер, только можешь сделать кнопки побольше и убрать лишние отступы? Хочется, чтобы "дышало", но не слишком»');
+  showIntro('«Всё супер, только можешь сделать кнопки побольше и убрать лишние отступы? Хочется, чтобы "дышало", но не слишком»');
   onNextClick(desktopIntro3);
 }
 
@@ -1887,7 +1891,7 @@ function desktopIntro3() {
   showCharacter();
   setCharacter('assets/girl-default.png');
   showCapsule();
-  setDialogue('Кнопки побольше, отступы поменьше, чтоб "дышало", но не сильно…');
+  setDialogue('Кнопки побольше, отступы поменьше, чтоб "дышало", но не сильно…');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   hideChoicesKeepSlot();
   onNextClick(desktopChoice1);
@@ -1962,7 +1966,7 @@ function chatWithColleagues() {
 function checkEmail() {
   addPoint('introversion');
   hideChoicesKeepSlot();
-  setDialogue('Так, никакой болтовни, только я и эти 1829110 писем');
+  setDialogue('Так, никакой болтовни, только я и эти 1829110 писем');
   dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(startDesktopScene);
 }
@@ -2025,7 +2029,7 @@ function scene4Intro2() {
   onNextClick(scene4Intro3);
 }
 function scene4Intro3() {
-  showIntro('«Дизайнеры опять наворотили, а нам теперь переделывать»');
+  showIntro('«Дизайнеры опять наворотили, а нам теперь переделывать»');
   onNextClick(scene4Girl2);
 }
 function scene4Girl2() {
@@ -2033,7 +2037,7 @@ function scene4Girl2() {
   showCharacter();
   setCharacter('assets/girl-smile.png');
   showCapsule();
-  setDialogue('А может, просто кинуть стикер с обезьяной и выйти из чата?');
+  setDialogue('А может, просто кинуть стикер с обезьяной и выйти из чата?');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   hideChoicesKeepSlot();
   onNextClick(scene4Girl3);
@@ -2053,7 +2057,7 @@ function scene4Choice1() {
   addPoint('awareness');
   showCharacter();
   setCharacter('assets/girl-default.png');
-  setDialogue('Если бы у нас был компонент, не пришлось бы придумывать');
+  setDialogue('Если бы у нас был компонент, не пришлось бы придумывать');
   hideChoicesKeepSlot();
   onNextClick(() => {
     setDialogue('Это не просто хотелка, мы решаем конкретную проблему');
@@ -2114,7 +2118,7 @@ function scene4Choice2() {
         intro.style.display = 'block';
         showIntro('В чате наступает неловкая пауза...');
         onNextClick(() => {
-          showIntro('Кто-то кидает стикер с собакой в огне...');
+          showIntro('Кто-то кидает стикер с собакой в огне...');
           onNextClick(() => {
             intro.style.display = 'none';
             showDev();
@@ -2154,7 +2158,7 @@ function scene4Research() {
   hideChoicesKeepSlot();
   onNextClick(() => {
     setCharacter('assets/girl-default.png');
-    setDialogue('Люблю, когда можно проверить по факту, а не по ощущениям');
+    setDialogue('Люблю, когда можно проверить по факту, а не по ощущениям');
     dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
     hideChoicesKeepSlot();
     onNextClick(scene4Finale);
@@ -2215,7 +2219,7 @@ function scene4Silent() {
   hideChoicesKeepSlot();
   onNextClick(() => {
     setCharacter('assets/girl-default.png');
-    setDialogue('Кажется, сегодня я интроверт на максималках');
+    setDialogue('Кажется, сегодня я интроверт на максималках');
     dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
     hideChoicesKeepSlot();
     onNextClick(startScene5);
