@@ -256,7 +256,7 @@ function scene4ReviewStart() {
   showCharacter();
   setCharacter('assets/girl-default.png');
   showCapsule();
-  setDialogue('Погнали...');
+  setDialogue('Начинаем...');
   dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   showChoicesHTML(`
     <button class="choice" onclick="scene4ReviewEmpathy()">Пройдусь по всему</button>
@@ -760,14 +760,15 @@ function revealButtonKey(e) {
 function showArchetype() {
   // Матрица архетипов: [E, I, Emp, Ind, Tox, Awa, Perf, Prag]
   const archetypes = [
-    { id: 0, name: 'aesthete', traits: [1, 2, 0, 2, 3, 1, 3, 0] },      // Эстет-террорист
-    { id: 1, name: 'ninja', traits: [1, 3, 3, 0, 0, 3, 2, 1] },         // Корпоративный ниндзя
-    { id: 2, name: 'punk', traits: [3, 0, 1, 2, 2, 0, 0, 3] },          // Product-панк
-    { id: 3, name: 'skull', traits: [2, 1, 3, 0, 1, 2, 2, 1] },         // Фигма-гуру на грани
-    { id: 4, name: 'lips', traits: [0, 3, 1, 2, 0, 3, 3, 0] },          // Старший интроверт
-    { id: 5, name: 'bird', traits: [1, 2, 3, 0, 0, 3, 2, 0] },          // Душнила с добрым сердцем
-    { id: 6, name: 'battery', traits: [1, 2, 2, 1, 1, 1, 3, 0] },       // Креативный выгоревший
-    { id: 7, name: 'ice', traits: [0, 3, 0, 2, 2, 3, 3, 0] }            // Методичный циник
+    // Матрица: [E, I, Emp, Ind, Tox, Awa, Perf, Prag]
+    { id: 0, name: 'aesthete', traits: [3, 0, 0, 3, 3, 0, 3, 0] },      // Эстет-террорист
+    { id: 1, name: 'ninja',   traits: [0, 3, 3, 0, 0, 3, 3, 0] },       // Корпоративный ниндзя
+    { id: 2, name: 'punk',    traits: [3, 0, 0, 2, 2, 1, 0, 3] },       // Product-панк
+    { id: 3, name: 'skull',   traits: [2, 1, 2, 1, 1, 2, 3, 0] },       // Фигма-гуру на грани
+    { id: 4, name: 'lips',    traits: [0, 3, 2, 1, 0, 3, 2, 1] },       // Старший Интроверт
+    { id: 5, name: 'bird',    traits: [1, 2, 2, 1, 0, 3, 1, 2] },       // Душнила с добрым сердцем
+    { id: 6, name: 'battery', traits: [2, 1, 1, 2, 1, 1, 2, 2] },       // Креативный выгоревший
+    { id: 7, name: 'ice',     traits: [1, 2, 0, 3, 1, 1, 0, 3] }        // Методичный циник
   ];
   
   // Вектор пользователя: [E, I, Emp, Ind, Tox, Awa, Perf, Prag]
@@ -1701,7 +1702,7 @@ function scene3HelpIntern() {
   addPoint('empathy');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
-  setDialogue('Да, конечно. Покажи, что не получается?');
+  setDialogue('Да, конечно. Покажи, что не получается?');
   onNextClick(scene3HelpIntern2);
 }
 
