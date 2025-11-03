@@ -3,3 +3,6 @@ TECHNICAL.md
 .DS_Store
 assets/.DS_Store
 assets/Comic Sans MS.ttf
+
+# Development - keep original source local
+game.original.js
