@@ -940,8 +940,29 @@ function hideDev() {
 }
 
 /* ---------- UI helpers ---------- */
+// Небольшой типографский форматтер для предотвращения некрасивных переносов
+function formatTypography(text) {
+  if (!text) return text;
+  let t = String(text);
+  // 1) После запятой перед союзами оставляем неразрывный пробел, чтобы союз не висел в начале строки
+  t = t.replace(/,\s+(но|а|и|или|да)\b/gi, ',\u00A0$1');
+  // 2) Однобуквенные предлоги склеиваем со следующим словом/числом
+  t = t.replace(/\b([вксуо])\s+(?=[0-9А-Яа-яA-Za-z])/g, '$1\u00A0');
+  // 3) Не позволяем переносить короткие местоимения с дефисом (кто-то, что-то и т.п.)
+  const NBH = '\u2011'; // неразрывный дефис
+  const hyphenWords = [
+    'кто-то','что-то','где-то','как-то','когда-то','куда-то',
+    'какой-то','какая-то','какие-то','какое-то'
+  ];
+  hyphenWords.forEach((w) => {
+    const re = new RegExp(w.replace('-', '\\-'), 'gi');
+    t = t.replace(re, w.replace('-', NBH));
+  });
+  return t;
+}
+
 function setDialogue(text) {
-  dialogue.textContent = text;
+  dialogue.textContent = formatTypography(text);
 }
 
 function showCapsule() {
@@ -1013,7 +1034,7 @@ const introDialogues = [
 let i = 0;
 
 function showIntro(text) {
-  intro.textContent = text;
+  intro.textContent = formatTypography(text);
 }
 
 function hideIntro() {
