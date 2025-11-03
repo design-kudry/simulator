@@ -1229,8 +1229,11 @@ function endOfCoffeeScene() {
   
   // Сразу показываем текст
   intro.style.display = 'block';
-  showIntro('После короткой разминки утро набирает обороты. На экране уже мигают задачи — день начинается по-настоящему');
-  onNextClick(scene1Done);
+  showIntro('После короткой разминки утро набирает обороты.');
+  onNextClick(function() {
+    showIntro('На экране уже мигают задачи — день начинается по-настоящему');
+    onNextClick(scene1Done);
+  });
 }
 
 function scene1Done() {
@@ -1951,8 +1954,11 @@ function endOfDesktopScene() {
   hideCapsule();
   hideCharacter();
   intro.style.display = 'block';
-  showIntro('После короткой разминки утро набирает обороты. На экране уже мигают задачи — день начинается по-настоящему');
-  onNextClick(scene1Done);
+  showIntro('После короткой разминки утро набирает обороты.');
+  onNextClick(function() {
+    showIntro('На экране уже мигают задачи — день начинается по-настоящему');
+    onNextClick(scene1Done);
+  });
 }
 
 function chatWithColleagues() {
