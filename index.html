@@ -6,6 +6,9 @@
 <title>Design Simulator</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 
+<!-- Network priority hints -->
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+
 <!-- Google tag (gtag.js) -->
 <script>
   // Защита от падения при блокировке GA (VPN, ad blockers)
@@ -128,22 +131,22 @@
 
     <!-- Фон (2 слоя) + затемнение -->
     <div id="scene-stack">
-      <img id="sceneA" class="scene-layer is-active" src="assets/background-home.webp" alt="">
-      <img id="sceneB" class="scene-layer"           src="assets/background-home.webp" alt="">
+      <img id="sceneA" class="scene-layer is-active" src="assets/background-home.webp" alt="" fetchpriority="high" decoding="async">
+      <img id="sceneB" class="scene-layer"           alt="" loading="lazy" decoding="async">
       <div id="scene-dimmer"></div>
     </div>
 
     <!-- Персонаж (один слой, без анимации) -->
-    <img id="character" src="assets/girl-default.webp" alt="character" />
+  <img id="character" src="assets/girl-default.webp" alt="character" fetchpriority="high" decoding="async" />
     
     <!-- Второй персонаж (менеджер справа) -->
-    <img id="manager" src="assets/manager-default.webp" alt="manager" />
+  <img id="manager" src="assets/manager-default.webp" alt="manager" loading="lazy" decoding="async" />
 
   <!-- Стажёр (как менеджер, справа) -->
-  <img id="intern" src="assets/intern-default.webp" alt="intern" />
+  <img id="intern" src="assets/intern-default.webp" alt="intern" loading="lazy" decoding="async" />
 
   <!-- Разработчик (как менеджер, справа) -->
-    <img id="dev" src="assets/dev-default.webp" alt="dev" />    <!-- Капсула 236px -->
+  <img id="dev" src="assets/dev-default.webp" alt="dev" loading="lazy" decoding="async" />    <!-- Капсула 236px -->
     <div id="ui-capsule">
       <div id="badges-row">
         <div id="badge">Продуктовый дизайнер</div>
@@ -266,6 +269,14 @@
   }
 </style>
 
-<script src="game.min.js?v=176220850112345"></script>
+<script>
+  // Lightweight SW registration for faster repeat loads
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
+</script>
+<script src="game.min.js?v=176220850112345" defer></script>
 </body>
 </html>
