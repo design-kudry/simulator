@@ -7,8 +7,12 @@
 .dialogue-gameplay,
 #intro,
 #dialogue {
-  text-wrap: balance;
-  hyphens: manual;
+  /* Балансировка ломала ожидаемые переносы. Оставляем аккуратные переносы без насильного выравнивания */
+  text-wrap: pretty; /* предпочтительно избегает висячих слов без агрессивной балансировки */
+  hyphens: none;     /* не пытаться переносить слова автоматически */
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: pre-line; /* уважаем \n как явный перенос строки */
 }
 
 @font-face {
