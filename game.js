@@ -203,7 +203,7 @@ function startScene5() {
   hideCapsule();
   hideCharacter();
   intro.style.display = 'block';
-    showIntro('Оставляешь чат, допиваешь остывший кофе\nи снова втыкаешь в ноут');
+    showIntro('Оставляешь чат, допиваешь остывший кофе и снова втыкаешь в ноут');
   onNextClick(scene5Intro2);
 }
 
@@ -764,12 +764,12 @@ function showArchetype() {
   const archetypes = [
     // Матрица: [E, I, Emp, Ind, Tox, Awa, Perf, Prag]
   { id: 0, name: 'aesthete', traits: [1, 2, 0, 3, 3, 0, 3, 0] },      // Эстет-террорист
-  { id: 1, name: 'ninja',   traits: [0, 3, 3, 0, 0, 3, 3, 0] },       // Корп. ниндзя
-  { id: 2, name: 'punk',    traits: [3, 0, 0, 3, 3, 0, 0, 3] },       // Product-панк
-  { id: 3, name: 'skull',   traits: [2, 1, 2, 1, 1, 2, 3, 0] },       // Фигма-гуру
-  { id: 4, name: 'lips',    traits: [0, 3, 0, 3, 0, 3, 3, 1] },       // Старший интроверт
-  { id: 5, name: 'bird',    traits: [2, 1, 3, 0, 0, 3, 0, 3] },       // Душнила
-  { id: 6, name: 'battery', traits: [2, 1, 1, 2, 2, 1, 0, 3] },       // Креативный выгоревший
+  { id: 1, name: 'ninja',   traits: [0, 3, 3, 0, 0, 3, 2, 1] },       // Корп. ниндзя
+  { id: 2, name: 'punk',    traits: [3, 0, 0, 2, 3, 0, 0, 3] },       // Product-панк
+  { id: 3, name: 'skull',   traits: [2, 1, 0, 3, 1, 2, 3, 0] },       // Фигма-гуру
+  { id: 4, name: 'lips',    traits: [0, 3, 0, 3, 0, 2, 3, 1] },       // Старший интроверт
+  { id: 5, name: 'bird',    traits: [1, 2, 3, 0, 0, 3, 2, 0] },       // Душнила
+  { id: 6, name: 'battery', traits: [2, 1, 1, 2, 1, 1, 1, 3] },       // Креативный выгоревший
   { id: 7, name: 'ice',     traits: [1, 2, 0, 3, 1, 1, 0, 3] }        // Методичный циник
   ];
   
