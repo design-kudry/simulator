@@ -7,12 +7,17 @@
 .dialogue-gameplay,
 #intro,
 #dialogue {
-  /* Балансировка ломала ожидаемые переносы. Оставляем аккуратные переносы без насильного выравнивания */
-  text-wrap: pretty; /* предпочтительно избегает висячих слов без агрессивной балансировки */
+  /* Балансировка отключена для естественного переноса */
+  text-wrap: wrap;   /* обычный перенос без балансировки */
   hyphens: none;     /* не пытаться переносить слова автоматически */
   overflow-wrap: normal;
   word-break: normal;
   white-space: pre-line; /* уважаем \n как явный перенос строки */
+  /* Блокировка выделения текста для меньшего отвлечения */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 @font-face {

@@ -7,13 +7,30 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C7BHS2F2DD"></script>
+<script>
+  // Защита от падения при блокировке GA (VPN, ad blockers)
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  window.gtag = gtag;
+  
+  // Tiny helper for consistent event sending + optional console echo
+  window.trackEvent = function(name, params){
+    try {
+      if (typeof gtag === 'function') {
+        gtag('event', name, params || {});
+      }
+      if (window.__GA_DEBUG__) {
+        console.log('[GA4]', name, params || {});
+      }
+    } catch (e) {
+      if (window.__GA_DEBUG__) console.warn('[GA4 error]', e);
+    }
+  };
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C7BHS2F2DD" onerror="console.warn('GA blocked or failed')"></script>
 <script>
   // GA4 basic setup + optional DebugView toggle via ?ga_debug=1
   (function(){
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    window.gtag = gtag;
     gtag('js', new Date());
 
     var params = new URLSearchParams(location.search);
@@ -35,26 +52,12 @@
       document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(badge); });
     }
   })();
-  
-  // Tiny helper for consistent event sending + optional console echo
-  window.trackEvent = function(name, params){
-    try {
-      if (typeof gtag === 'function') {
-        gtag('event', name, params || {});
-      }
-      if (window.__GA_DEBUG__) {
-        console.log('[GA4]', name, params || {});
-      }
-    } catch (e) {
-      if (window.__GA_DEBUG__) console.warn('[GA4 error]', e);
-    }
-  };
 </script>
 
-<!-- Preload критичных ресурсов для быстрой загрузки -->
+<!-- Preload только первого экрана для мгновенного старта -->
 <link rel="preload" as="image" href="assets/background-home.webp" type="image/webp">
 <link rel="preload" as="image" href="assets/girl-default.webp" type="image/webp">
-<link rel="stylesheet" href="styles.css?v=1762206001">
+<link rel="stylesheet" href="styles.css?v=1762207501">
 </head>
 <body>
   <div id="stage">
@@ -202,6 +205,6 @@
   }
 </style>
 
-<script src="game.min.js?v=176220600112345"></script>
+<script src="game.min.js?v=176220750112345"></script>
 </body>
 </html>

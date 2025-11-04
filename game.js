@@ -807,6 +807,7 @@ function showArchetype() {
   
   // Отслеживание завершения игры с результатом архетипа
   if (typeof trackEvent === 'function') {
+    // Основное событие завершения
     trackEvent('game_complete', {
       'event_category': 'game',
       'event_label': 'finished',
@@ -820,6 +821,13 @@ function showArchetype() {
       'awareness': state.awareness,
       'perfectionism': state.perfectionism,
       'pragmatism': state.pragmatism
+    });
+    
+    // Дополнительное событие для упрощённой статистики по архетипам
+    trackEvent('archetype_result', {
+      'event_category': 'result',
+      'event_label': archetypes[selectedArchetype].name,
+      'value': selectedArchetype
     });
   }
   
@@ -2276,8 +2284,8 @@ function scene4Silent() {
 // Вызов startScene4() — после завершения scene3Done()
 // Например, в scene3Done добавить: startScene4();
 
-/* ---------- Preload всех фонов для быстрой смены ---------- */
-(function preloadBackgrounds() {
+/* ---------- Фоновая загрузка ассетов (не блокирует старт) ---------- */
+(function backgroundPreload() {
   const backgrounds = [
     'assets/background-office.png',
     'assets/background-coffeepoint.png',
@@ -2285,28 +2293,21 @@ function scene4Silent() {
     'assets/background-meeting.png',
     'assets/background-homenight.png'
   ];
-  backgrounds.forEach(bg => {
-    resolveImageSrc(bg).then(src => {
-      const img = new Image();
-      img.src = src;
-      if (img.decode) img.decode().catch(() => {});
+  
+  // Грузим в фоне после небольшой задержки, чтобы не мешать первому экрану
+  setTimeout(() => {
+    backgrounds.forEach(bg => {
+      resolveImageSrc(bg).then(src => {
+        const img = new Image();
+        img.src = src;
+        if (img.decode) img.decode().catch(() => {});
+      });
     });
-  });
+  }, 100);
 })();
 
-/* ---------- Preload первого фона для быстрого старта ---------- */
+/* ---------- Быстрый старт — показываем сразу ---------- */
 window.addEventListener('load', () => {
-  // Убираем loading screen после загрузки критичных ресурсов
-  const sceneA = document.getElementById('sceneA');
-  const character = document.getElementById('character');
-  
-  Promise.all([
-    sceneA.decode ? sceneA.decode() : Promise.resolve(),
-    character.decode ? character.decode() : Promise.resolve()
-  ]).then(() => {
-    document.body.classList.add('loaded');
-  }).catch(() => {
-    // Fallback: убираем loading даже если decode не поддерживается
-    document.body.classList.add('loaded');
-  });
+  // Убираем loading screen сразу после загрузки DOM
+  document.body.classList.add('loaded');
 });
