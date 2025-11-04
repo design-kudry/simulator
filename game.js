@@ -807,11 +807,13 @@ function showArchetype() {
   
   // Отслеживание завершения игры с результатом архетипа
   if (typeof trackEvent === 'function') {
+    const archetypeName = archetypes[selectedArchetype].name;
+    
     // Основное событие завершения
     trackEvent('game_complete', {
       'event_category': 'game',
       'event_label': 'finished',
-      'archetype': archetypes[selectedArchetype].name,
+      'archetype': archetypeName,
       'archetype_id': selectedArchetype,
       'extroversion': state.extroversion,
       'introversion': state.introversion,
@@ -823,11 +825,10 @@ function showArchetype() {
       'pragmatism': state.pragmatism
     });
     
-    // Дополнительное событие для упрощённой статистики по архетипам
-    trackEvent('archetype_result', {
-      'event_category': 'result',
-      'event_label': archetypes[selectedArchetype].name,
-      'value': selectedArchetype
+    // Отдельное событие для каждого архетипа (легко смотреть в отчётах)
+    trackEvent('result_' + archetypeName, {
+      'event_category': 'archetype',
+      'event_label': archetypeName
     });
   }
   
