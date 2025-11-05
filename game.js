@@ -1234,11 +1234,18 @@ function goToOffice() {
 }
 
 function transitionToOffice() {
-  // Переход из дома в офис (как scene2Done)
+  // Переход из дома в офис - включаем затемнение плавно
   hideCapsule();
   hideCharacter();
   intro.style.display = 'none';
-  startScene1();
+  
+  // Включаем затемнение вручную для плавности
+  dimmer.classList.add('is-on');
+  
+  // Ждём пока затемнение сработает, потом меняем сцену
+  setTimeout(() => {
+    startScene1();
+  }, 400);
 }
 
 function startScene1() {
