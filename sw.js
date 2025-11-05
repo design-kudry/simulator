@@ -1,9 +1,9 @@
 /* Simple offline-first cache to speed up repeat loads */
-const CACHE_NAME = 'simulator-cache-v1';
+const CACHE_NAME = 'simulator-cache-v2';
 const PRECACHE_URLS = [
   'index.html',
   'styles.css',
-  'game.min.js', // ignoreSearch will serve versioned query variants
+  'game.js', // ignoreSearch will serve versioned query variants
   'assets/background-home.webp',
   'assets/girl-default.webp'
 ];
