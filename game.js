@@ -166,11 +166,8 @@ function setCharacter(src) {
 function showCharacter() {
   character.style.display = 'block';
   badge.style.display = 'inline-flex';
-  // Двойной requestAnimationFrame для корректной CSS анимации
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      character.classList.add('visible');
-    });
+    character.classList.add('visible');
   });
 }
 
@@ -1216,7 +1213,7 @@ function workFromHome() {
     dialogueEl.innerHTML = dialogueEl.textContent; // без форматирования
   }
   
-  onNextClick(transitionToOffice);
+  onNextClick(startScene1);
 }
 
 function goToOffice() {
@@ -1230,22 +1227,7 @@ function goToOffice() {
     dialogueEl.textContent = 'О, ты решил пойти в офис, как неожиданно и приятно, уверена, что коллеги соскучились по тебе';
   }
   
-  onNextClick(transitionToOffice);
-}
-
-function transitionToOffice() {
-  // Переход из дома в офис - включаем затемнение плавно
-  hideCapsule();
-  hideCharacter();
-  intro.style.display = 'none';
-  
-  // Включаем затемнение вручную для плавности
-  dimmer.classList.add('is-on');
-  
-  // Ждём пока затемнение сработает, потом меняем сцену
-  setTimeout(() => {
-    startScene1();
-  }, 400);
+  onNextClick(startScene1);
 }
 
 function startScene1() {
@@ -1258,9 +1240,11 @@ function startScene1() {
     });
   }
 
-  changeScene('assets/background-office.png');
+  changeScene('assets/background-office.png'); // мягко + медленно
   hideCapsule();
   hideCharacter();
+
+  // Сразу показываем текст вместе с фоном
   intro.style.display = 'block';
   showIntro('Вот ты и оказался в любимом офисе');
   onNextClick(showScene1Part2);
