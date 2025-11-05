@@ -166,8 +166,11 @@ function setCharacter(src) {
 function showCharacter() {
   character.style.display = 'block';
   badge.style.display = 'inline-flex';
+  // Двойной requestAnimationFrame для корректной CSS анимации
   requestAnimationFrame(() => {
-    character.classList.add('visible');
+    requestAnimationFrame(() => {
+      character.classList.add('visible');
+    });
   });
 }
 
@@ -1213,7 +1216,7 @@ function workFromHome() {
     dialogueEl.innerHTML = dialogueEl.textContent; // без форматирования
   }
   
-  onNextClick(startScene1);
+  onNextClick(transitionToOffice);
 }
 
 function goToOffice() {
@@ -1227,7 +1230,15 @@ function goToOffice() {
     dialogueEl.textContent = 'О, ты решил пойти в офис, как неожиданно и приятно, уверена, что коллеги соскучились по тебе';
   }
   
-  onNextClick(startScene1);
+  onNextClick(transitionToOffice);
+}
+
+function transitionToOffice() {
+  // Переход из дома в офис (как scene2Done)
+  hideCapsule();
+  hideCharacter();
+  intro.style.display = 'none';
+  startScene1();
 }
 
 function startScene1() {
@@ -1240,21 +1251,12 @@ function startScene1() {
     });
   }
 
-  // Сначала плавно скрываем персонажа и капсулу
+  changeScene('assets/background-office.png');
   hideCapsule();
   hideCharacter();
-  
-  // Даём время на fade-out (800ms), потом меняем сцену
-  setTimeout(() => {
-    changeScene('assets/background-office.png');
-    
-    // Показываем текст после начала смены сцены
-    setTimeout(() => {
-      intro.style.display = 'block';
-      showIntro('Вот ты и оказался в любимом офисе');
-      onNextClick(showScene1Part2);
-    }, 400);
-  }, 800);
+  intro.style.display = 'block';
+  showIntro('Вот ты и оказался в любимом офисе');
+  onNextClick(showScene1Part2);
 }
 
 function showScene1Part2() {
