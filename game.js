@@ -1240,14 +1240,21 @@ function startScene1() {
     });
   }
 
-  changeScene('assets/background-office.png'); // мягко + медленно
+  // Сначала плавно скрываем персонажа и капсулу
   hideCapsule();
   hideCharacter();
-
-  // Сразу показываем текст вместе с фоном
-  intro.style.display = 'block';
-  showIntro('Вот ты и оказался в любимом офисе');
-  onNextClick(showScene1Part2);
+  
+  // Даём время на fade-out (800ms), потом меняем сцену
+  setTimeout(() => {
+    changeScene('assets/background-office.png');
+    
+    // Показываем текст после начала смены сцены
+    setTimeout(() => {
+      intro.style.display = 'block';
+      showIntro('Вот ты и оказался в любимом офисе');
+      onNextClick(showScene1Part2);
+    }, 400);
+  }, 800);
 }
 
 function showScene1Part2() {
