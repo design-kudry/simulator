@@ -820,6 +820,11 @@ function showArchetype() {
     };
     const archetypeTitle = archetypeTitles[archetypeName] || archetypeName;
     
+    // Вычисляем время игры (в секундах)
+    const gameTime = window.__gameStartTime ? Math.round((Date.now() - window.__gameStartTime) / 1000) : 0;
+    const gameTimeMin = Math.floor(gameTime / 60);
+    const gameTimeSec = gameTime % 60;
+    
     // Основное событие завершения
     trackEvent('game_complete', {
       'event_category': 'game',
@@ -827,6 +832,8 @@ function showArchetype() {
       'archetype': archetypeName,
       'archetype_id': selectedArchetype,
       'archetype_title': archetypeTitle,
+      'game_duration_sec': gameTime,
+      'game_duration_readable': `${gameTimeMin}:${gameTimeSec.toString().padStart(2, '0')}`,
       'extroversion': state.extroversion,
       'introversion': state.introversion,
       'empathy': state.empathy,
@@ -842,7 +849,8 @@ function showArchetype() {
       'event_category': 'result',
       'event_label': archetypeTitle,
       'archetype_name': archetypeName,
-      'archetype_id': selectedArchetype
+      'archetype_id': selectedArchetype,
+      'game_duration_sec': gameTime
     });
   }
   
@@ -1104,7 +1112,9 @@ function nextIntro() {
 }
 
 function startGameplay() {
-  // Отслеживание начала игры
+  // Отслеживание начала игры + запоминаем время старта
+  window.__gameStartTime = Date.now();
+  
   if (typeof trackEvent === 'function') {
     trackEvent('game_start', {
       'event_category': 'game',

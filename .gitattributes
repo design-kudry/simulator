@@ -1,0 +1,5 @@
+# Скрыть служебные файлы в GitHub UI (но они останутся в репо)
+ANALYTICS.md linguist-documentation
+SCENARIO.md linguist-documentation
+TECHNICAL.md linguist-documentation
+tools/** linguist-vendored
