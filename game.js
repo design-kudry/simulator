@@ -272,7 +272,7 @@ function scene4ReviewEmpathy() {
   addPoint('empathy');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
-  setDialogue('В целом всё ок, есть пара мелких моментов. Соберу пару скринов, оформлю док');
+  setDialogue('В целом всё ок, есть пара мелких моментов. Соберу скрины, оформлю док');
   dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   onNextClick(() => {
     setDialogue('Здесь норм, но шрифт съехал. Тут иконка фоткой. Переход дёргается. Мелочь, но видно');
@@ -307,7 +307,7 @@ function scene5Reflect1() {
   showCharacter();
   setCharacter('assets/girl-default.png');
   showCapsule();
-  setDialogue('Кажется, это был норм день. Или нет?..');
+  setDialogue('Кажется, это был норм день. Или нет?..');
   dialogue.innerHTML = '<em>«' + dialogue.textContent + '»</em>';
   hideChoicesKeepSlot();
   onNextClick(scene5Approach);
@@ -1187,7 +1187,12 @@ function startCoffeeScene() {
   
   // Сразу показываем текст
   intro.style.display = 'block';
-  showIntro('Ты заходишь на кухню. Пахнет тостами, кто-то спорит у кофемашины');
+  showIntro('Ты заходишь на кухню');
+  onNextClick(coffeeIntro1b);
+}
+
+function coffeeIntro1b() {
+  showIntro('Пахнет тостами, кто-то спорит у кофемашины');
   onNextClick(coffeeIntro2);
 }
 
@@ -1615,7 +1620,7 @@ function meetingPragmatismAfter() {
   hideCapsule();
   hideCharacter();
   intro.style.display = 'block';
-  showIntro('Ты быстро встаёшь, и остальные сразу следом. Облегчение ощущается физически — встреча окончена');
+  showIntro('Ты быстро встаёшь, остальные следом. Облегчение ощущается физически — встреча окончена');
   onNextClick(meetingPragmatismAfter2);
 }
 
@@ -1995,7 +2000,7 @@ function emailDelete() {
 
 function emailDeleteAfter() {
   setCharacter('assets/girl-toxic.png');
-    setDialogue('Если промолчать — никто не расстроится. А я сэкономлю себе минимально один нейрон');
+    setDialogue('Если промолчать — никто не расстроится. А я сэкономлю себе минимально один нейрон');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   onNextClick(endOfDesktopScene);
 }
@@ -2270,7 +2275,7 @@ function scene4Praise() {
 function scene4Silent() {
   addPoint('introversion');
   setCharacter('assets/girl-default.png');
-  setDialogue('Да ну, подумают, что подлизываюсь…\nЛучше тихо порадуюсь');
+  setDialogue('Да ну, подумают, что подлизываюсь…Лучше тихо порадуюсь');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   hideChoicesKeepSlot();
   onNextClick(() => {
@@ -2294,16 +2299,34 @@ function scene4Silent() {
     'assets/background-meeting.png',
     'assets/background-homenight.png'
   ];
+  const sprites = [
+    // main character
+    'assets/girl-default.png',
+    'assets/girl-smile.png',
+    // manager variants
+    'assets/manager-default.png',
+    'assets/manager-surprise.png',
+    // intern variants
+    'assets/intern-default.png',
+    'assets/intern-sad.png',
+    // dev variants
+    'assets/dev-default.png',
+    'assets/dev-smile.png',
+    'assets/dev-surprise.png'
+  ];
   
   // Грузим в фоне после небольшой задержки, чтобы не мешать первому экрану
   setTimeout(() => {
-    backgrounds.forEach(bg => {
-      resolveImageSrc(bg).then(src => {
+    const preload = (list) => list.forEach(p => {
+      resolveImageSrc(p).then(src => {
         const img = new Image();
         img.src = src;
         if (img.decode) img.decode().catch(() => {});
       });
     });
+    preload(backgrounds);
+    // Slightly stagger sprite preloads to not compete with backgrounds
+    setTimeout(() => preload(sprites), 200);
   }, 100);
 })();
 
