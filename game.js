@@ -69,8 +69,33 @@ const state = {
   perfectionism: 0,
   pragmatism: 0,
 };
-function addPoint(trait) {
+
+// История выборов для аналитики
+const choicePath = [];
+let currentScene = '';
+
+function addPoint(trait, choiceLabel) {
   if (trait in state) state[trait]++;
+  
+  // Сохраняем выбор в историю и отправляем в GA
+  const choice = {
+    scene: currentScene,
+    trait: trait,
+    label: choiceLabel || trait
+  };
+  choicePath.push(choice);
+  
+  // Отслеживание выбора в GA
+  if (typeof trackEvent === 'function') {
+    trackEvent('player_choice', {
+      'event_category': 'choice',
+      'event_label': `${currentScene}: ${choice.label}`,
+      'scene': currentScene,
+      'trait': trait,
+      'choice_text': choiceLabel || trait
+    });
+  }
+  
   // console.debug('state', state);
 }
 
@@ -256,6 +281,7 @@ function scene4ReviewIntro2() {
 }
 
 function scene4ReviewStart() {
+  currentScene = 'scene4_review';
   intro.style.display = 'none';
   showCharacter();
   setCharacter('assets/girl-default.png');
@@ -269,7 +295,7 @@ function scene4ReviewStart() {
 }
 
 function scene4ReviewEmpathy() {
-  addPoint('empathy');
+  addPoint('empathy', 'Пройдусь по всему');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
   setDialogue('В целом всё ок, есть пара мелких моментов. Соберу скрины, оформлю док');
@@ -289,7 +315,7 @@ function scene4ReviewEmpathy() {
 // (deprecated duplicate of scene4Transition removed)
 
 function scene4ReviewIndifference() {
-  addPoint('indifference');
+  addPoint('indifference', 'И так сойдёт');
   hideChoicesKeepSlot();
   setCharacter('assets/girl-default.png');
   setDialogue('Выглядит норм, работает, не разваливается, а это уже победа');
@@ -825,6 +851,9 @@ function showArchetype() {
     const gameTimeMin = Math.floor(gameTime / 60);
     const gameTimeSec = gameTime % 60;
     
+    // Формируем строку пути выборов (компактная версия)
+    const pathString = choicePath.map(c => c.trait.substring(0,3)).join('-');
+    
     // Основное событие завершения
     trackEvent('game_complete', {
       'event_category': 'game',
@@ -834,6 +863,8 @@ function showArchetype() {
       'archetype_title': archetypeTitle,
       'game_duration_sec': gameTime,
       'game_duration_readable': `${gameTimeMin}:${gameTimeSec.toString().padStart(2, '0')}`,
+      'choice_path': pathString,
+      'total_choices': choicePath.length,
       'extroversion': state.extroversion,
       'introversion': state.introversion,
       'empathy': state.empathy,
@@ -882,8 +913,16 @@ function showArchetype() {
 }
 
 function replayGame() {
+  // Отслеживаем перепрохождение
+  if (typeof trackEvent === 'function') {
+    trackEvent('game_replay', {
+      'event_category': 'engagement',
+      'event_label': 'replay_clicked'
+    });
+  }
+  
   // Перезагрузка страницы для нового прохождения
-  window.location.reload();
+  setTimeout(() => window.location.reload(), 100);
 }
 
 // helper to show intro text with one-liner
