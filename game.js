@@ -386,8 +386,7 @@ function scene5ChoiceStart() {
 }
 
 function scene5ChoiceYes() {
-  currentScene = 'scene5_pitch';
-  addPoint('extroversion', 'Ну давай, расскажи');
+  addPoint('extroversion');
   hideChoicesKeepSlot();
   hideCharacter();
   showManager();
@@ -397,8 +396,7 @@ function scene5ChoiceYes() {
 }
 
 function scene5ChoiceNo() {
-  currentScene = 'scene5_pitch';
-  addPoint('introversion', 'Чувак, я так устала…');
+  addPoint('introversion');
   hideChoicesKeepSlot();
   hideCharacter();
   showManager();
@@ -619,20 +617,23 @@ function finaleProcessing1() {
   intro.style.display = 'block';
   intro.classList.add('centered-text'); // Центрируем текст для loading экранов
   showIntro('Обработка данных…');
-  onNextClick(finaleProcessing2);
+  // Автоматический переход через 1.5 секунды
+  setTimeout(finaleProcessing2, 1500);
 }
 
 function finaleProcessing2() {
   showIntro('Анализ поведения…');
-  onNextClick(finaleProcessing3);
+  // Автоматический переход через 1.5 секунды
+  setTimeout(finaleProcessing3, 1500);
 }
 
 function finaleProcessing3() {
   showIntro('Подбор архетипа…');
-  onNextClick(() => {
+  // Автоматический переход через 1.5 секунды
+  setTimeout(() => {
     intro.classList.remove('centered-text'); // Убираем центрирование после loading экранов
     showArchetype();
-  });
+  }, 1500);
 }
 
 /* ===== Данные финальных экранов ===== */
@@ -1201,12 +1202,31 @@ function showOfficeResponse() {
 }
 
 function workFromHome() {
-  showOfficeResponse();
+  // Показываем отказ от удалёнки
+  hideChoicesKeepSlot();
+  setCharacter('assets/girl-default.png');
+  
+  // Устанавливаем текст напрямую в элемент
+  const dialogueEl = document.getElementById('dialogue');
+  if (dialogueEl) {
+    dialogueEl.textContent = 'Прости, родной, тут нет бюджета на удалёнку';
+    dialogueEl.innerHTML = dialogueEl.textContent; // без форматирования
+  }
+  
   onNextClick(startScene1);
 }
 
 function goToOffice() {
-  showOfficeResponse();
+  // Радостная реакция при выборе офиса
+  hideChoicesKeepSlot();
+  setCharacter('assets/girl-smile.png');
+  
+  // Устанавливаем текст напрямую в элемент
+  const dialogueEl = document.getElementById('dialogue');
+  if (dialogueEl) {
+    dialogueEl.textContent = 'О, ты решил пойти в офис, как неожиданно и приятно, уверена, что коллеги соскучились по тебе';
+  }
+  
   onNextClick(startScene1);
 }
 
@@ -2268,41 +2288,22 @@ function scene4Choice2() {
   });
 }
 function scene4Transition() {
-  // Переход к осмотру стенда (новая версия по сценарию)
-  hideDev();
-  showCharacter();
-  setCharacter('assets/girl-default.png');
-  setDialogue('А вообще я люблю разработчиков');
-  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+  // Переход к дизайн‑ревью (новый флоу)
+  hideCharacter();
+  showDev();
+  setDev('assets/dev-default.png');
+  showCapsule();
+  setDialogue('Пока мы дописываем, можешь глянуть новый раздел, только выкатили');
   hideChoicesKeepSlot();
-  onNextClick(() => {
-    setDialogue('Просто у нас своеобразные отношения…');
-    dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
-    onNextClick(() => {
-      setCharacter('assets/girl-default.png');
-      setDialogue('Хм. А пойду посмотрю, что они на стенде сделали');
-      onNextClick(() => {
-        setCharacter('assets/girl-smile.png');
-        setDialogue('О, красиво. И правда всё работает. Молодцы');
-        onNextClick(() => {
-          setDialogue('Интересно… а реально ли решение закрыло боль?');
-          dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
-          showChoicesHTML(`
-            <button class="choice" onclick="scene4Research()">Предложу провести исследование</button>
-            <button class="choice" onclick="scene4ShipIt()">Выкатили и ладно</button>
-          `);
-        });
-      });
-    });
-  });
+  onNextClick(scene4ReviewGirlAgree);
 }
 function scene4Research() {
-  currentScene = 'scene4_research';
-  addPoint('empathy', 'Предложу провести исследование');
+  addPoint('empathy');
   setCharacter('assets/girl-smile.png');
-  setDialogue('Соберу гипотезы и закину команде. Надо понять, насколько решение реально закрыло боли');
+  setDialogue('Соберу гипотезы и закину коллегам. Надо понять, насколько решение реально закрыло боли');
   hideChoicesKeepSlot();
   onNextClick(() => {
+    setCharacter('assets/girl-default.png');
     setDialogue('Люблю, когда можно проверить по факту, а не по ощущениям');
     dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
     hideChoicesKeepSlot();
@@ -2310,8 +2311,7 @@ function scene4Research() {
   });
 }
 function scene4ShipIt() {
-  currentScene = 'scene4_ship';
-  addPoint('indifference', 'Выкатили и ладно');
+  addPoint('indifference');
   setCharacter('assets/girl-default.png');
   setDialogue('Ну, багов нет — уже неплохо');
   hideChoicesKeepSlot();
