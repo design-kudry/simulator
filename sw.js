@@ -1,5 +1,5 @@
 /* Simple offline-first cache to speed up repeat loads */
-const CACHE_NAME = 'simulator-cache-v3';
+const CACHE_NAME = 'simulator-cache-v4';
 const PRECACHE_URLS = [
   'index.html',
   'styles.css',
