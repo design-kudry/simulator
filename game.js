@@ -808,6 +808,17 @@ function showArchetype() {
   // Отслеживание завершения игры с результатом архетипа
   if (typeof trackEvent === 'function') {
     const archetypeName = archetypes[selectedArchetype].name;
+    const archetypeTitles = {
+      'aesthete': 'Эстет-террорист',
+      'ninja': 'Корпоративный ниндзя',
+      'punk': 'Product-панк',
+      'skull': 'Фигма-гуру',
+      'lips': 'Старший интроверт',
+      'bird': 'Душнила',
+      'battery': 'Креативный выгоревший',
+      'ice': 'Методичный циник'
+    };
+    const archetypeTitle = archetypeTitles[archetypeName] || archetypeName;
     
     // Основное событие завершения
     trackEvent('game_complete', {
@@ -815,6 +826,7 @@ function showArchetype() {
       'event_label': 'finished',
       'archetype': archetypeName,
       'archetype_id': selectedArchetype,
+      'archetype_title': archetypeTitle,
       'extroversion': state.extroversion,
       'introversion': state.introversion,
       'empathy': state.empathy,
@@ -825,10 +837,12 @@ function showArchetype() {
       'pragmatism': state.pragmatism
     });
     
-    // Отдельное событие для каждого архетипа (легко смотреть в отчётах)
-    trackEvent('result_' + archetypeName, {
-      'event_category': 'archetype',
-      'event_label': archetypeName
+    // Событие для конкретного результата архетипа (для подсчета в GA)
+    trackEvent('archetype_result', {
+      'event_category': 'result',
+      'event_label': archetypeTitle,
+      'archetype_name': archetypeName,
+      'archetype_id': selectedArchetype
     });
   }
   
