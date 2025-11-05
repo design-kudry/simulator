@@ -386,7 +386,8 @@ function scene5ChoiceStart() {
 }
 
 function scene5ChoiceYes() {
-  addPoint('extroversion');
+  currentScene = 'scene5_pitch';
+  addPoint('extroversion', 'Ну давай, расскажи');
   hideChoicesKeepSlot();
   hideCharacter();
   showManager();
@@ -396,7 +397,8 @@ function scene5ChoiceYes() {
 }
 
 function scene5ChoiceNo() {
-  addPoint('introversion');
+  currentScene = 'scene5_pitch';
+  addPoint('introversion', 'Чувак, я так устала…');
   hideChoicesKeepSlot();
   hideCharacter();
   showManager();
@@ -2266,22 +2268,41 @@ function scene4Choice2() {
   });
 }
 function scene4Transition() {
-  // Переход к дизайн‑ревью (новый флоу)
-  hideCharacter();
-  showDev();
-  setDev('assets/dev-default.png');
-  showCapsule();
-  setDialogue('Пока мы дописываем, можешь глянуть новый раздел, только выкатили');
-  hideChoicesKeepSlot();
-  onNextClick(scene4ReviewGirlAgree);
-}
-function scene4Research() {
-  addPoint('empathy');
-  setCharacter('assets/girl-smile.png');
-  setDialogue('Соберу гипотезы и закину коллегам. Надо понять, насколько решение реально закрыло боли');
+  // Переход к осмотру стенда (новая версия по сценарию)
+  hideDev();
+  showCharacter();
+  setCharacter('assets/girl-default.png');
+  setDialogue('А вообще я люблю разработчиков');
+  dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   hideChoicesKeepSlot();
   onNextClick(() => {
-    setCharacter('assets/girl-default.png');
+    setDialogue('Просто у нас своеобразные отношения…');
+    dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+    onNextClick(() => {
+      setCharacter('assets/girl-default.png');
+      setDialogue('Хм. А пойду посмотрю, что они на стенде сделали');
+      onNextClick(() => {
+        setCharacter('assets/girl-smile.png');
+        setDialogue('О, красиво. И правда всё работает. Молодцы');
+        onNextClick(() => {
+          setDialogue('Интересно… а реально ли решение закрыло боль?');
+          dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
+          showChoicesHTML(`
+            <button class="choice" onclick="scene4Research()">Предложу провести исследование</button>
+            <button class="choice" onclick="scene4ShipIt()">Выкатили и ладно</button>
+          `);
+        });
+      });
+    });
+  });
+}
+function scene4Research() {
+  currentScene = 'scene4_research';
+  addPoint('empathy', 'Предложу провести исследование');
+  setCharacter('assets/girl-smile.png');
+  setDialogue('Соберу гипотезы и закину команде. Надо понять, насколько решение реально закрыло боли');
+  hideChoicesKeepSlot();
+  onNextClick(() => {
     setDialogue('Люблю, когда можно проверить по факту, а не по ощущениям');
     dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
     hideChoicesKeepSlot();
@@ -2289,7 +2310,8 @@ function scene4Research() {
   });
 }
 function scene4ShipIt() {
-  addPoint('indifference');
+  currentScene = 'scene4_ship';
+  addPoint('indifference', 'Выкатили и ладно');
   setCharacter('assets/girl-default.png');
   setDialogue('Ну, багов нет — уже неплохо');
   hideChoicesKeepSlot();
@@ -2338,7 +2360,7 @@ function scene4Praise() {
 function scene4Silent() {
   addPoint('introversion');
   setCharacter('assets/girl-default.png');
-  setDialogue('Да ну, подумают, что подлизываюсь…Лучше тихо порадуюсь');
+  setDialogue('Да ну, подумают, что подлизываюсь… Лучше тихо порадуюсь');
   dialogue.innerHTML = '<em>' + dialogue.textContent + '</em>';
   hideChoicesKeepSlot();
   onNextClick(() => {

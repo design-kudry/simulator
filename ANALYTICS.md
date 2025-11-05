@@ -103,14 +103,10 @@ Google Analytics 4 (GA4) подключен к вашей игре с ID: **G-C7
 ✅ **3. Откуда пришли** — Отчеты → Acquisition → Traffic acquisition (источники)  
 ✅ **4. Кто какой архетип** — событие `archetype_result`, параметр `event_label`  
 ✅ **5. Сколько времени играли** — параметр `game_duration_sec` в событии `game_complete`  
-✅ **6. Какие пути выборов ведут к каким архетипам** — параметр `choice_path` в `game_complete` + события `player_choice`  
-✅ **7. Процент перепрохождений** — событие `game_replay` vs `game_complete`
 
-**Дополнительно:**  
+**Бонус:**  
 ✅ **На каком этапе теряются игроки** — сравнение `scene_reached` по номерам сцен  
 ✅ **Средняя длительность игры по архетипам** — фильтр `archetype_title` + `game_duration_sec`  
-✅ **Популярные выборы** — событие `player_choice` по параметру `choice_text`  
-✅ **Retention rate** — сколько игроков повторно проходят игру  
 
 ---
 
