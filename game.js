@@ -886,6 +886,16 @@ function showArchetype() {
       'archetype_id': selectedArchetype,
       'game_duration_sec': gameTime
     });
+    // Backwards-compatible event name used in older dashboards: result_<name>
+    try {
+      trackEvent('result_' + archetypeName, {
+        'archetype_name': archetypeName,
+        'archetype_id': selectedArchetype,
+        'game_duration_sec': gameTime
+      });
+    } catch (e) {
+      if (window.__GA_DEBUG__) console.warn('Failed to send legacy result event', e);
+    }
   }
   
   // Скрываем игровой интерфейс
